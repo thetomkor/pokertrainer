@@ -643,6 +643,11 @@ button.disabled {
   pointer-events: none;
 }
 
+.seat:not(.hero) .stack {
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
 .seat.hero .stack {
   pointer-events: auto;
   touch-action: manipulation;
@@ -4298,8 +4303,11 @@ const UI = (() => {
     });
     if (player.holeCards.length === 0) return;
 
+    const historyMode = (typeof window.__sessionShowHistoryLabel !== 'undefined') && window.__sessionShowHistoryLabel === true;
+
     let show;
-    if (state.handOver && state.showdownResults && !state.showdownResults.uncontested) show = true;
+    if (player.isHero && historyMode) show = true;
+    else if (state.handOver && state.showdownResults && !state.showdownResults.uncontested) show = true;
     else if (settings.hideHeroHand && player.isHero) show = false;
     else if (settings.showAllHands) show = true;
     else if (state.handOver) {
@@ -5479,8 +5487,8 @@ const UI = (() => {
       const stackEl = e.target.closest('.stack');
       const cardsEl = e.target.closest('.seat-cards');
       if (stackEl) {
-        const isHeroSeat = !!stackEl.closest('.seat.hero');
-        if (!isHeroSeat) return;
+        const seat = stackEl.closest('.seat');
+        if (!seat) return;
         if (registerDoubleTap(stackEl)) {
           e.preventDefault(); e.stopPropagation();
           handleStackTap();
@@ -5706,7 +5714,7 @@ const UI = (() => {
       const cardsEl = e.target.closest('.seat-cards');
       if (stackEl) {
         e.stopPropagation(); e.preventDefault();
-        if (stackEl.closest('.seat.hero')) handleStackTap();
+        handleStackTap();
         return;
       }
       if (cardsEl) {
