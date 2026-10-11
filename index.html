@@ -1185,6 +1185,7 @@ button.disabled {
   font-weight: 700;
 }
 
+/* ===== Окно Настройки ===== */
 #bottom-panel {
   position: absolute;
   bottom: 0;
@@ -1217,6 +1218,60 @@ button.disabled {
   margin-bottom: 12px;
   font-weight: 800;
   text-align: center;
+}
+
+#bottom-panel .setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #1f1f1f;
+  color: var(--muted-soft);
+  font-size: 13px;
+}
+#bottom-panel .setting:last-of-type { border-bottom: none; }
+#bottom-panel .setting select {
+  background: #1a1a1a;
+  color: var(--text);
+  border: 1px solid #2a2520;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 40px;
+  cursor: pointer;
+}
+#bottom-panel .setting input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+#btn-restart-panel {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffcb2b, #e0a800);
+  color: #1a1a1a;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  box-shadow: 0 3px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
+  touch-action: manipulation;
+  min-height: 48px;
+  transition: transform .08s ease, filter .08s ease;
+  font-family: inherit;
+}
+#btn-restart-panel:active:not(:disabled) {
+  transform: scale(0.97);
+  filter: brightness(1.1);
+  box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
 }
 
 #top-round-row {
