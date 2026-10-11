@@ -265,7 +265,6 @@ button.disabled {
   display: inline-block;
 }
 
-/* Значок копирования: передний — левый-нижний, лежит поверх заднего (правого-верхнего). */
 .hh-copy-icon {
   position: absolute;
   left: 100%;
@@ -1220,7 +1219,6 @@ button.disabled {
   text-align: center;
 }
 
-/* Кнопки ? $ ! — контейнер, привязан над панелью истории раздач с комфортным отступом. */
 #top-round-row {
   position: absolute;
   display: flex;
@@ -1257,7 +1255,8 @@ button.disabled {
   -ms-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 0 4px rgba(184,146,74,.35)) drop-shadow(0 0 8px rgba(184,146,74,.2));
+  /* Свечение убрано в состоянии покоя */
+  filter: none;
   transition: opacity .18s ease, filter .18s ease, transform .12s ease;
   text-decoration: none;
   overflow: visible;
@@ -1275,9 +1274,10 @@ button.disabled {
   pointer-events: none;
 }
 
+/* Сердечко в покое — яркий вариант без свечения */
 .top-icon-btn.top-icon-btn--heart {
   color: var(--ph-heart-bright);
-  filter: drop-shadow(0 0 5px rgba(198,154,82,.55)) drop-shadow(0 0 12px rgba(198,154,82,.38)) drop-shadow(0 0 22px rgba(198,154,82,.20));
+  filter: none;
 }
 
 .top-icon-btn:focus,
@@ -1290,6 +1290,7 @@ button.disabled {
   background: transparent;
 }
 
+/* При нажатии свечение как было */
 .top-icon-btn:active {
   transform: scale(0.9);
   opacity: 1;
@@ -1300,6 +1301,7 @@ button.disabled {
   filter: drop-shadow(0 0 9px rgba(184,146,74,.95)) drop-shadow(0 0 22px rgba(184,146,74,.6));
 }
 
+/* При наведении свечение как было */
 @media (hover: hover) {
   .top-icon-btn:hover {
     opacity: .95;
@@ -1322,9 +1324,12 @@ button.disabled {
   transform: translateX(-6px);
 }
 
-/* =====================================================================
-   Окно «Поддержи автора» — точная копия окна поддержки с лендинга
-   ===================================================================== */
+/* Мобильная версия — иконки ближе друг к другу */
+@media (max-width: 767px) {
+  #top-round-row {
+    gap: 12px;
+  }
+}
 
 #support-overlay {
   position: fixed;
@@ -2878,11 +2883,6 @@ const Math2 = (() => {
     return betSize / total;
   }
 
-  function spr(effStack, pot) {
-    if (pot <= 0) return 100;
-    return effStack / pot;
-  }
-
   function blockerEffect(heroHole, oppRange) {
     if (!oppRange || oppRange.length === 0) return 0;
     const heroKeys = new Set([heroHole[0].rank + heroHole[0].suit, heroHole[1].rank + heroHole[1].suit]);
@@ -2932,7 +2932,6 @@ const Math2 = (() => {
     potOdds,
     mdf,
     alpha,
-    spr,
     blockerEffect,
     buildOpponentRange
   };
@@ -3898,7 +3897,6 @@ const UI = (() => {
     const GAP_ABOVE_HAND_NAV = 14;
     const top = haRect.top - tableRect.top - GAP_ABOVE_HAND_NAV - rowHeight;
 
-    // Выравнивание по левому краю панели истории раздач.
     const left = haRect.left - tableRect.left;
 
     el.topRoundRow.style.left = left + 'px';
