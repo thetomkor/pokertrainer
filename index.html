@@ -1308,7 +1308,7 @@ button.disabled {
   opacity: .85;
   cursor: pointer;
   line-height: 0;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1322,6 +1322,8 @@ button.disabled {
   -webkit-appearance: none;
   appearance: none;
   touch-action: manipulation;
+  -webkit-focus-ring-color: transparent;
+  outline-offset: 0;
 }
 
 .top-icon-btn svg {
@@ -1340,12 +1342,21 @@ button.disabled {
 
 .top-icon-btn:focus,
 .top-icon-btn:focus-visible,
+.top-icon-btn:focus-within,
 .top-icon-btn:active,
 .top-icon-btn:hover {
   outline: none;
+  outline-offset: 0;
   box-shadow: none;
   border: none;
   background: transparent;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-focus-ring-color: transparent;
+}
+
+.top-icon-btn::-moz-focus-inner {
+  border: 0;
+  padding: 0;
 }
 
 .top-icon-btn::selection,
@@ -4306,7 +4317,7 @@ const UI = (() => {
     const historyMode = (typeof window.__sessionShowHistoryLabel !== 'undefined') && window.__sessionShowHistoryLabel === true;
 
     let show;
-    if (player.isHero && historyMode) show = true;
+    if (player.isHero && (historyMode || state.handOver)) show = true;
     else if (state.handOver && state.showdownResults && !state.showdownResults.uncontested) show = true;
     else if (settings.hideHeroHand && player.isHero) show = false;
     else if (settings.showAllHands) show = true;
