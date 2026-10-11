@@ -211,6 +211,7 @@ button.disabled {
 }
 
 #place-center {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,6 +232,87 @@ button.disabled {
   line-height: 1.3;
   min-height: 1.3em;
 }
+
+/* Hands History внутри блока ранга: полностью непрозрачная, цвет #a8a8a8,
+   как было до переноса. Позиционируется над строкой Rank с отступом 30px. */
+#hands-history-row {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
+  margin-bottom: 30px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--hands-history-text);
+  color: #a8a8a8;
+  font-weight: 700;
+  letter-spacing: .3px;
+  line-height: 1.3;
+  min-height: 1.3em;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-shadow: 0 1px 4px rgba(0,0,0,.95);
+  z-index: 6;
+}
+#hands-history-row.visible { display: flex; }
+#hands-history-row.pressed,
+#hands-history-row.pressed #hands-history-label { color: var(--gold); }
+
+#hands-history-label {
+  position: relative;
+  display: inline-block;
+}
+
+.hh-copy-icon {
+  position: absolute;
+  left: 100%;
+  margin-left: 6px;
+  top: 0;
+  transform: translateY(0);
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+}
+.hh-copy-icon::before,
+.hh-copy-icon::after {
+  content: "";
+  position: absolute;
+  border: 1px solid #a8a8a8;
+  border-radius: 1px;
+  background: transparent;
+}
+.hh-copy-icon::before {
+  width: 4px;
+  height: 4px;
+  left: 0;
+  top: 2px;
+}
+.hh-copy-icon::after {
+  width: 4px;
+  height: 4px;
+  left: 2px;
+  top: 0;
+}
+
+#hands-history-copied {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
+  margin-bottom: 6px;
+  font-size: var(--info-row-text);
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: .3px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+#hands-history-copied.visible { opacity: 1; }
 
 #swipe-center {
   position: absolute;
@@ -348,82 +430,6 @@ button.disabled {
   min-height: 1.3em;
 }
 #table-info .info-row.faded { opacity: 0.45; }
-
-#hands-history-row {
-  position: absolute;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--hands-history-text);
-  color: #a8a8a8;
-  font-weight: 700;
-  letter-spacing: .3px;
-  line-height: 1.3;
-  min-height: 1.3em;
-  white-space: nowrap;
-  pointer-events: auto;
-  cursor: pointer;
-  touch-action: manipulation;
-  text-shadow: 0 1px 4px rgba(0,0,0,.95);
-  z-index: 6;
-  transform: translate(-50%, -50%);
-}
-#hands-history-row.visible { display: flex; }
-#hands-history-row.pressed,
-#hands-history-row.pressed #hands-history-label { color: var(--gold); }
-
-#hands-history-label {
-  position: relative;
-  display: inline-block;
-}
-
-.hh-copy-icon {
-  position: absolute;
-  left: 100%;
-  margin-left: 6px;
-  top: 0;
-  transform: translateY(0);
-  width: 6px;
-  height: 6px;
-  pointer-events: none;
-}
-.hh-copy-icon::before,
-.hh-copy-icon::after {
-  content: "";
-  position: absolute;
-  border: 1px solid #a8a8a8;
-  border-radius: 1px;
-  background: transparent;
-}
-.hh-copy-icon::before {
-  width: 4px;
-  height: 4px;
-  left: 0;
-  top: 2px;
-}
-.hh-copy-icon::after {
-  width: 4px;
-  height: 4px;
-  left: 2px;
-  top: 0;
-}
-
-#hands-history-copied {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 100%;
-  margin-bottom: 6px;
-  font-size: var(--info-row-text);
-  color: var(--gold);
-  font-weight: 700;
-  letter-spacing: .3px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s ease;
-}
-#hands-history-copied.visible { opacity: 1; }
 
 .card {
   width: var(--card-w);
@@ -2303,6 +2309,10 @@ button.disabled {
         <div id="swipe-center"></div>
         <div id="board-area">
           <div id="place-center">
+            <div id="hands-history-row">
+              <span id="hands-history-label">Hands History<span class="hh-copy-icon"></span></span>
+              <span id="hands-history-copied">Copied</span>
+            </div>
             <div class="place-line" id="place-line">Rank: 1/8 ITM: 3</div>
           </div>
           <div id="top-info">
@@ -2316,11 +2326,6 @@ button.disabled {
             <div class="info-row" id="info-blinds-row">Blinds: 10/20</div>
             <div class="info-row faded" id="info-timer-row">10 hands: 15/30</div>
           </div>
-        </div>
-
-        <div id="hands-history-row">
-          <span id="hands-history-label">Hands History<span class="hh-copy-icon"></span></span>
-          <span id="hands-history-copied">Copied</span>
         </div>
 
         <div id="seats"></div>
@@ -4981,33 +4986,8 @@ const UI = (() => {
   }
 
   function placeHandsHistoryRow() {
-    if (!el.handsHistoryRow) return;
-    const tableEl = document.getElementById('poker-table');
-    if (!tableEl) return;
-
-    const tableRect = tableEl.getBoundingClientRect();
-    const leftSeat = findSeatByVisualIndex(2);
-    const rightSeat = findSeatByVisualIndex(6);
-
-    if (!leftSeat || !rightSeat) {
-      el.handsHistoryRow.style.left = '50%';
-      el.handsHistoryRow.style.top = '20%';
-      return;
-    }
-
-    const leftCards = leftSeat.querySelector('.seat-cards');
-    const rightCards = rightSeat.querySelector('.seat-cards');
-    const leftCardsRect = leftCards ? leftCards.getBoundingClientRect() : leftSeat.getBoundingClientRect();
-    const rightCardsRect = rightCards ? rightCards.getBoundingClientRect() : rightSeat.getBoundingClientRect();
-
-    const midX = (leftCardsRect.left + rightCardsRect.right) / 2;
-    const midY = (leftCardsRect.top + leftCardsRect.height / 2 + rightCardsRect.top + rightCardsRect.height / 2) / 2;
-
-    const localX = midX - tableRect.left;
-    const localY = midY - tableRect.top;
-
-    el.handsHistoryRow.style.left = localX + 'px';
-    el.handsHistoryRow.style.top = localY + 'px';
+    /* Hands History теперь часть блока place-center — отдельное
+       позиционирование по местам 2 и 6 больше не нужно. */
   }
 
   function findSeatByVisualIndex(visualIndex) {
@@ -5536,7 +5516,6 @@ const UI = (() => {
     if (!el.handsHistoryRow) return;
     const shouldShow = window.__sessionShowHistoryLabel === true;
     el.handsHistoryRow.classList.toggle('visible', shouldShow);
-    if (shouldShow) placeHandsHistoryRow();
   }
 
   function updateBoard(state) {
@@ -7030,7 +7009,6 @@ const UI = (() => {
       UI.alignPercentBlockBottom();
       UI.placeTopRoundRow();
       UI.placeGuidePanel();
-      UI.placeHandsHistoryRow();
       UI.relayoutSlider();
     });
     window.addEventListener('orientationchange', () => {
@@ -7039,7 +7017,6 @@ const UI = (() => {
         UI.alignPercentBlockBottom();
         UI.placeTopRoundRow();
         UI.placeGuidePanel();
-        UI.placeHandsHistoryRow();
         UI.relayoutSlider();
       }, 250);
     });
@@ -8937,9 +8914,6 @@ const UI = (() => {
       }
     };
 
-    // Определяем, кто ходит первым на улице.
-    // preflop: первый после BB (для мультивей) или BTN/SB (для HU).
-    // postflop: первый после BTN (в позиции SB) — для мультивей, для HU — BB первым.
     const computeFirstActorOnStreet = (street) => {
       const n = cur.players.length;
       if (n === 0) return -1;
@@ -8958,7 +8932,6 @@ const UI = (() => {
 
       if (street === 'preflop') {
         if (aliveCount === 2) {
-          // HU: BTN = SB — ходит первым префлоп
           if (sbIdxForReplay >= 0) return sbIdxForReplay;
           return nextAliveAfter(bbIdxForReplay >= 0 ? bbIdxForReplay : 0);
         }
@@ -8966,24 +8939,17 @@ const UI = (() => {
         return -1;
       }
 
-      // Postflop
       if (aliveCount === 2) {
-        // HU: первым после BTN — BB
         if (bbIdxForReplay >= 0) return bbIdxForReplay;
         if (sbIdxForReplay >= 0) return nextAliveAfter(sbIdxForReplay);
         return -1;
       }
-      // Мультивей: первым после BTN (SB)
       const btnIdx = (typeof snap.buttonIndex === 'number') ? snap.buttonIndex : 0;
       return nextAliveAfter(btnIdx);
     };
 
-    // Кто походил на текущей улице (множество seatIndex).
     const actedThisStreet = new Set();
 
-    // Найти игрока, к кому переходит ход: идём по кругу от lastActorSeat вперёд,
-    // пропускаем folded/eliminated/allIn, и находим первого, кто должен ходить:
-    // не действовал на этой улице ИЛИ его committed < currentBet.
     const findCurrentActorSeat = (fromSeatExclusive, currentBet) => {
       const n = cur.players.length;
       if (n === 0) return -1;
@@ -9002,10 +8968,8 @@ const UI = (() => {
     let lastStreet = 'preflop';
     let replayCurrentBet = 0;
 
-    // Применяем блайнды в текущий снимок
     takeBoardSnapshot(lastStreet);
 
-    // Ход первого игрока на префлопе
     actedThisStreet.clear();
     let currentActorSeat = computeFirstActorOnStreet('preflop');
 
@@ -9095,7 +9059,6 @@ const UI = (() => {
 
       actedThisStreet.add(pl.seatIndex);
 
-      // После действия ищем следующего активного игрока, кому переходит ход.
       const nextSeat = findCurrentActorSeat(pl.seatIndex, replayCurrentBet);
 
       steps.push({
