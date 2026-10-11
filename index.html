@@ -56,11 +56,6 @@
 
   --hero-timer-size: clamp(40px, 5.6vmin, 52px);
   --hero-timer-left: calc(clamp(8px, 1.2vmin, 10px) + 2px);
-  --support-btn-h: clamp(28px, 3.6vmin, 34px);
-  --support-btn-fs: clamp(10px, 1.3vmin, 12px);
-
-  --belcard-offset: 8px;
-  --belcard-lift: 8px;
 
   --table-col-w: min(94vw, calc((100vh - clamp(8px, 1.6vmin, 20px)) * 9 / 16));
 }
@@ -231,8 +226,7 @@ button.disabled {
   min-height: 1.3em;
 }
 
-/* Hands History внутри блока ранга: полностью непрозрачная, цвет #a8a8a8,
-   как было до переноса. Позиционируется над строкой Rank с отступом 30px. */
+/* Hands History внутри блока ранга: полностью непрозрачная, цвет #a8a8a8. */
 #hands-history-row {
   position: absolute;
   left: 50%;
@@ -264,6 +258,7 @@ button.disabled {
   display: inline-block;
 }
 
+/* Значок копирования: два квадратика. Передний (левый-нижний) поверх заднего (правый-верхний). */
 .hh-copy-icon {
   position: absolute;
   left: 100%;
@@ -282,17 +277,21 @@ button.disabled {
   border-radius: 1px;
   background: #4a4a4a;
 }
+/* Задний — правый-верхний. Рисуется первым, остаётся под передним. */
 .hh-copy-icon::before {
-  width: 4px;
-  height: 4px;
-  left: 0;
-  top: 2px;
-}
-.hh-copy-icon::after {
   width: 4px;
   height: 4px;
   left: 2px;
   top: 0;
+  z-index: 1;
+}
+/* Передний — левый-нижний. Рисуется вторым, лежит поверх. */
+.hh-copy-icon::after {
+  width: 4px;
+  height: 4px;
+  left: 0;
+  top: 2px;
+  z-index: 2;
 }
 
 #hands-history-copied {
@@ -850,650 +849,6 @@ button.disabled {
 
 .seat .hero-timer-wrap[data-state="active"] .hero-timer-svg { opacity: 1; }
 
-#support-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  z-index: 300;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  touch-action: none;
-}
-#support-overlay.visible { display: flex; }
-
-#support-window {
-  position: relative;
-  width: min(90%, 380px);
-  background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
-  border: 2px solid #3a3530;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.9), 0 0 80px rgba(255,203,43,.08);
-  padding: clamp(20px, 4vmin, 28px) clamp(18px, 3.6vmin, 26px);
-  text-align: left;
-}
-
-#support-window h3 {
-  color: var(--gold);
-  font-size: clamp(12px, 1.8vmin, 15px);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 18px;
-  font-weight: 900;
-  text-align: center;
-}
-
-.belcard-stack {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1.586 / 1;
-  margin-bottom: calc(clamp(14px, 2.4vmin, 20px) + var(--belcard-offset) + var(--belcard-offset));
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-  overflow: visible;
-}
-
-.belcard-stack .belcard {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: 100%;
-  aspect-ratio: 1.586 / 1;
-  border-radius: clamp(10px, 1.8vmin, 14px);
-  overflow: hidden;
-  padding: clamp(12px, 2.2vmin, 18px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #ffffff;
-  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-  will-change: transform;
-  transition: transform .38s cubic-bezier(.22,.61,.36,1);
-}
-
-.belcard-stack.dragging .belcard {
-  transition: none;
-}
-
-.belcard-stack .belcard.belcard-blue {
-  background:
-    linear-gradient(135deg, #18387e 0%, #224ba1 45%, #4373c1 100%);
-  box-shadow:
-    0 12px 22px -8px rgba(0,0,0,.75),
-    0 6px 10px -4px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.25);
-}
-
-.belcard-stack .belcard.belcard-green {
-  background:
-    linear-gradient(135deg, #195630 0%, #246b41 45%, #3d8c55 100%);
-  box-shadow:
-    0 12px 22px -8px rgba(0,0,0,.65),
-    0 6px 10px -4px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.25);
-}
-
-.belcard-stack .belcard.belcard-gray {
-  background:
-    linear-gradient(135deg, #3d3548 0%, #4a3f57 45%, #5b4e6b 100%);
-  box-shadow:
-    0 12px 22px -8px rgba(0,0,0,.55),
-    0 6px 10px -4px rgba(0,0,0,.4),
-    inset 0 1px 0 rgba(255,255,255,.2);
-}
-
-.belcard-stack .belcard.belcard-gold {
-  background:
-    linear-gradient(135deg, #4a3a10 0%, #6b5418 45%, #8a6f24 100%);
-  box-shadow:
-    0 12px 22px -8px rgba(0,0,0,.55),
-    0 6px 10px -4px rgba(0,0,0,.4),
-    inset 0 1px 0 rgba(255,255,255,.2);
-}
-
-.belcard::before {
-  content: "";
-  position: absolute;
-  top: -30%;
-  right: -10%;
-  width: 65%;
-  height: 160%;
-  background: rgba(255,255,255,0.08);
-  transform: rotate(22deg);
-  pointer-events: none;
-}
-.belcard::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at 20% 15%, rgba(255,255,255,0.18) 0%, transparent 45%);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.belcard-top {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.belcard-bank {
-  font-size: clamp(10px, 1.5vmin, 12px);
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-
-.belcard-club-top {
-  font-size: clamp(12px, 1.9vmin, 17px);
-  font-weight: 900;
-  font-style: normal;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  opacity: 0.95;
-  text-align: right;
-  line-height: 1.2;
-  text-shadow: 0 1px 2px rgba(0,0,0,.35);
-}
-
-.belcard-chip {
-  position: absolute;
-  top: clamp(28px, 4.5vmin, 38px);
-  left: clamp(12px, 2.2vmin, 18px);
-  width: clamp(26px, 4vmin, 34px);
-  height: clamp(20px, 3vmin, 26px);
-  border-radius: 4px;
-  background:
-    linear-gradient(135deg, #e8d9a0 0%, #c9b46a 50%, #a89040 100%);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
-  z-index: 2;
-}
-.belcard-chip::before {
-  content: "";
-  position: absolute;
-  top: 20%; left: 10%; right: 10%; bottom: 20%;
-  border: 1px solid rgba(0,0,0,.25);
-  border-radius: 2px;
-}
-
-.belcard-number-row {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 8px;
-  margin-top: auto;
-  margin-bottom: clamp(6px, 1.2vmin, 10px);
-}
-
-.copy-text {
-  position: relative;
-  display: inline-block;
-  padding-right: 14px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-}
-.copy-text:active { color: var(--gold); }
-
-.copy-icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 6px;
-  height: 6px;
-  pointer-events: none;
-  opacity: 1;
-  cursor: pointer;
-}
-.copy-icon::before,
-.copy-icon::after {
-  content: "";
-  position: absolute;
-  border: 1px solid #ffffff;
-  border-radius: 1px;
-  background: transparent;
-}
-.copy-icon::before {
-  width: 4px;
-  height: 4px;
-  left: 0;
-  top: 2px;
-}
-.copy-icon::after {
-  width: 4px;
-  height: 4px;
-  left: 2px;
-  top: 0;
-}
-
-.belcard-number {
-  font-size: clamp(13px, 2.1vmin, 17px);
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-shadow: 0 1px 2px rgba(0,0,0,.4);
-  align-self: flex-end;
-  white-space: nowrap;
-}
-
-.belcard-bottom {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.belcard-name {
-  font-size: clamp(11px, 1.7vmin, 14px);
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.belcard-currencies-top {
-  font-size: clamp(10px, 1.5vmin, 12px);
-  font-weight: 700;
-  letter-spacing: .6px;
-  text-align: right;
-  opacity: 0.95;
-  white-space: nowrap;
-  align-self: flex-end;
-  line-height: 1;
-  transform: translateY(-2px);
-}
-
-.belcard-paysend {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(14px, 2.1vmin, 19px);
-  font-weight: 900;
-  font-style: normal;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  opacity: 0.95;
-  text-align: center;
-  color: #ffffff;
-  text-decoration: none;
-  line-height: 1.2;
-  text-shadow: 0 1px 2px rgba(0,0,0,.35);
-  z-index: 4;
-  white-space: nowrap;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  pointer-events: auto;
-}
-.belcard-paysend:link,
-.belcard-paysend:visited,
-.belcard-paysend:hover,
-.belcard-paysend:active {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.belcard-usdt-line {
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
-  margin-bottom: clamp(6px, 1.2vmin, 10px);
-  text-align: left;
-  white-space: nowrap;
-  font-size: clamp(10px, 1.9vmin, 12.5px);
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  text-shadow: 0 1px 2px rgba(0,0,0,.4);
-  display: block;
-  width: 100%;
-}
-
-.belcard-bottom-line {
-  position: relative;
-  z-index: 2;
-  white-space: nowrap;
-  font-size: clamp(11px, 1.7vmin, 14px);
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.belcard-copied {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(20, 18, 16, 0.95);
-  color: var(--gold);
-  font-weight: 800;
-  font-size: clamp(13px, 1.8vmin, 16px);
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid #8a6508;
-  box-shadow: 0 4px 12px rgba(0,0,0,.8);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s ease;
-  z-index: 5;
-  white-space: nowrap;
-}
-.belcard-copied.visible {
-  opacity: 1;
-}
-
-.gold-gg {
-  font-size: calc(clamp(10px, 1.5vmin, 12px) + 2px);
-}
-
-.gold-name-label {
-  font-size: clamp(11px, 1.7vmin, 14px);
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: none;
-  text-shadow: none;
-  display: inline-block;
-  vertical-align: bottom;
-  line-height: 1;
-}
-
-.gold-name-value {
-  font-size: calc(clamp(11px, 1.7vmin, 14px) + 2px);
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-shadow: 0 1px 2px rgba(0,0,0,.55);
-  display: inline-block;
-  vertical-align: bottom;
-  line-height: 1;
-}
-
-.gold-nickname-row {
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
-  margin-bottom: clamp(6px, 1.2vmin, 10px);
-  text-align: left;
-  white-space: nowrap;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  display: block;
-  width: 100%;
-  line-height: 1;
-}
-
-#support-footer {
-  color: var(--muted);
-  font-size: clamp(13px, 1.7vmin, 15px);
-  text-align: center;
-  margin-top: 18px;
-  letter-spacing: .3px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  transform: translateY(10px);
-}
-
-#support-footer .foot-center {
-  flex: 1;
-  text-align: center;
-}
-
-@media (max-width: 767px) {
-  #support-window {
-    padding-bottom: calc(clamp(20px, 4vmin, 28px) + 6px);
-    transform: translateY(-3px);
-  }
-  #support-footer {
-    font-size: clamp(12px, 1.6vmin, 14px);
-  }
-}
-
-.lnd-contact-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  min-height: 50px;
-  border-radius: 14px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  transition: transform .1s ease, filter .1s ease, box-shadow .15s ease;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow:
-    0 6px 16px rgba(0,0,0,.55),
-    0 0 0 1px rgba(255,255,255,.06) inset,
-    0 1px 0 rgba(255,255,255,.14) inset;
-}
-
-.lnd-contact-btn::before {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 0;
-  height: 45%;
-  background: linear-gradient(180deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,0) 100%);
-  pointer-events: none;
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
-}
-
-.lnd-contact-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.22) 0%, transparent 55%);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.lnd-contact-btn .lnd-contact-svg {
-  position: relative;
-  z-index: 2;
-  width: 36px;
-  height: 36px;
-  display: block;
-}
-
-.lnd-contact-btn.tg .lnd-contact-svg {
-  width: 40px;
-  height: 40px;
-}
-
-.lnd-contact-btn.tg,
-.lnd-contact-btn.mail {
-  background: linear-gradient(180deg, #4aa8ff 0%, #1f7fe0 55%, #0b5fb3 100%);
-}
-
-.lnd-contact-btn:active {
-  transform: scale(0.94);
-  filter: brightness(1.08);
-  box-shadow:
-    0 3px 8px rgba(0,0,0,.5),
-    0 0 0 1px rgba(255,255,255,.08) inset,
-    0 1px 0 rgba(255,255,255,.14) inset;
-}
-
-@media (hover: hover) {
-  .lnd-contact-btn:hover {
-    filter: brightness(1.06);
-    box-shadow:
-      0 8px 22px rgba(0,0,0,.6),
-      0 0 0 1px rgba(255,255,255,.08) inset,
-      0 1px 0 rgba(255,255,255,.16) inset,
-      0 0 22px rgba(63,169,245,.28);
-  }
-}
-
-@media (max-width: 480px) {
-  .lnd-contact-btn { width: 46px; height: 46px; min-width: 46px; min-height: 46px; }
-  .lnd-contact-btn.mail .lnd-contact-svg { width: 34px; height: 34px; }
-  .lnd-contact-btn.tg .lnd-contact-svg { width: 38px; height: 38px; }
-}
-
-#training-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 150;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  touch-action: none;
-}
-#training-overlay.visible { display: flex; }
-
-#training-window {
-  position: relative;
-  width: var(--table-col-w);
-  max-width: 94vw;
-  height: 60vh;
-  height: 60dvh;
-  background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
-  border: 2px solid #3a3530;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.9), 0 0 80px rgba(255,203,43,.08);
-  padding: clamp(20px, 4vmin, 28px) clamp(18px, 3.6vmin, 26px);
-  text-align: left;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  scrollbar-width: none;
-}
-#training-window::-webkit-scrollbar { display: none; }
-
-#training-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 18px;
-  flex-shrink: 0;
-}
-#training-header-row h3 {
-  color: var(--gold);
-  font-size: clamp(12px, 1.8vmin, 15px);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 900;
-  text-align: center;
-  flex: 1;
-  margin: 0;
-}
-
-.training-nav-btn {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: transparent;
-  font-family: inherit;
-  font-weight: 900;
-  font-size: clamp(18px, 2.4vmin, 22px);
-  line-height: 1;
-  cursor: default;
-  touch-action: manipulation;
-  flex-shrink: 0;
-  width: 1em;
-  height: 1em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  caret-color: transparent;
-}
-.training-nav-btn:disabled {
-  cursor: default;
-}
-
-#training-text-viewport {
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-  min-height: 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-}
-#training-text-viewport::-webkit-scrollbar { display: none; width: 0; height: 0; }
-
-.training-text-page {
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  will-change: transform, opacity;
-}
-.training-text-page.offscreen-left {
-  transform: translateX(-110%);
-  opacity: 0;
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  pointer-events: none;
-}
-.training-text-page.offscreen-right {
-  transform: translateX(110%);
-  opacity: 0;
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  pointer-events: none;
-}
-.training-text-page.active {
-  transform: translateX(0);
-  opacity: 1;
-  position: relative;
-}
-
-.training-text {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-#training-test-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-  flex-shrink: 0;
-}
-#training-test-buttons button {
-  flex: 1;
-  padding: 12px 14px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffcb2b, #e0a800);
-  color: #1a1a1a;
-  font-weight: 900;
-  font-size: 13px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  box-shadow: 0 3px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
-  touch-action: manipulation;
-  min-height: 44px;
-  font-family: inherit;
-  transition: transform .08s ease, filter .08s ease;
-}
-#training-test-buttons button:active {
-  transform: scale(0.97);
-  filter: brightness(1.1);
-  box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
-}
-
 #hero-actions {
   position: absolute;
   left: calc(var(--dash-inset) + var(--edge));
@@ -1950,177 +1305,6 @@ button.disabled {
   box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
 }
 
-#guide-panel {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, -110%);
-  width: var(--table-col-w);
-  max-width: 94vw;
-  background: linear-gradient(180deg, #000000 0%, #0d0d0d 50%, #1a1a1a 100%);
-  border-bottom: 1px solid #2a2520;
-  border-left: 1px solid #2a2520;
-  border-right: 1px solid #2a2520;
-  border-bottom-left-radius: 14px;
-  border-bottom-right-radius: 14px;
-  padding: calc(24px + var(--safe-top)) 20px 30px;
-  transition: transform .28s ease;
-  z-index: 130;
-  overflow: hidden;
-  touch-action: pan-y;
-  scrollbar-width: none;
-  display: flex;
-  flex-direction: column;
-}
-#guide-panel::-webkit-scrollbar { display: none; }
-#guide-panel.open { transform: translate(-50%, 0); }
-
-#guide-panel h3 {
-  color: var(--gold);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 800;
-  text-align: center;
-  flex: 1;
-  margin: 0;
-}
-
-#guide-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 14px;
-  flex-shrink: 0;
-}
-
-#guide-scroll-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-#guide-text-viewport {
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(1em + 2px);
-}
-#guide-text-viewport::-webkit-scrollbar { display: none; width: 0; height: 0; }
-
-#guide-text-viewport.has-more-bottom {
-  -webkit-mask-image: linear-gradient(to bottom,
-    #000000 0%,
-    #000000 calc(100% - 4.2em),
-    rgba(0,0,0,0.65) calc(100% - 2.8em),
-    rgba(0,0,0,0.25) calc(100% - 1.4em),
-    rgba(0,0,0,0) 100%);
-  mask-image: linear-gradient(to bottom,
-    #000000 0%,
-    #000000 calc(100% - 4.2em),
-    rgba(0,0,0,0.65) calc(100% - 2.8em),
-    rgba(0,0,0,0.25) calc(100% - 1.4em),
-    rgba(0,0,0,0) 100%);
-}
-
-.guide-text-page {
-  position: relative;
-}
-
-.guide-text {
-  color: var(--muted-soft-2);
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 10px;
-  text-align: left;
-}
-.guide-text.muted {
-  color: var(--muted-soft-2);
-  font-size: 12px;
-}
-.guide-text:last-child {
-  margin-bottom: 0;
-}
-
-.guide-text b,
-.guide-text strong {
-  color: inherit;
-  font-weight: 700;
-}
-
-.guide-text.guide-heading {
-  color: #b8b8b8;
-  font-weight: 700;
-}
-
-#guide-scroll-top {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: var(--muted-soft);
-  font-family: inherit;
-  font-weight: 900;
-  font-size: calc(clamp(18px, 2.4vmin, 22px) - 2px);
-  line-height: 1;
-  width: 1em;
-  height: 1em;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  opacity: 0.85;
-  cursor: pointer;
-  touch-action: manipulation;
-  z-index: 6;
-}
-#guide-scroll-top.visible {
-  display: inline-flex;
-}
-#guide-scroll-top:active {
-  opacity: 1;
-  transform: translateX(-50%) scale(0.9);
-}
-
-#btn-support-panel {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  padding: 14px 16px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #ffcb2b, #e0a800);
-  color: #1a1a1a;
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: center;
-  box-shadow: 0 3px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
-  touch-action: manipulation;
-  min-height: 48px;
-  transition: transform .08s ease, filter .08s ease;
-  font-family: inherit;
-  flex-shrink: 0;
-}
-#btn-support-panel:active:not(:disabled) {
-  transform: scale(0.97);
-  filter: brightness(1.1);
-  box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
-}
-
 #tap-close {
   position: absolute;
   inset: 0;
@@ -2317,166 +1501,6 @@ button.disabled {
 
   <div id="tap-close"></div>
 
-  <div id="guide-panel">
-    <div id="guide-header-row">
-      <h3 id="guide-title">РУКОВОДСТВО</h3>
-    </div>
-    <div id="guide-scroll-wrap">
-      <div id="guide-text-viewport">
-
-        <div class="guide-text-page active" data-page="0" data-title="РУКОВОДСТВО">
-          <p class="guide-text guide-heading">Что такое Poker Trainer</p>
-          <p class="guide-text">
-            <b>Poker Trainer</b> — это симулятор турнирного покерного стола (Sit &amp; Go, Texas Hold'em, 8-max), созданный для тренировки двух навыков, которые нельзя развить ни одним солвером, ни одним калькулятором, ни одной теорией оптимальной игры. Эти навыки — <b>точная логика покерного мышления</b> и <b>ясное интуитивное восприятие поля информации</b>. Принципы и техники тренировок которых подробно описаны в разделе «Тренировка».
-          </p>
-          <p class="guide-text">
-            Это не тренажёр математики. Это не таблица чартов, не курс GTO. Это тренажёр того, как думает покерист, когда математика уже посчитана, а решение всё ещё нужно принять — против конкретного оппонента, в конкретной ситуации, с конкретной целью.
-          </p>
-          <p class="guide-text guide-heading">Чем Poker Trainer отличается от всего, что есть на рынке</p>
-          <p class="guide-text">
-            Солверы, калькуляторы эквити, GTO-тренажёры — все они дают ответ на вопрос «как играть правильно в вакууме». Но в реальном турнире вакуума нет. Есть живой оппонент, у которого есть память, страх, тильт, жадность и привычки. И против него «правильная» игра часто проигрывает «точной» игре — той, которая строится под его ошибки.
-          </p>
-          <p class="guide-text">
-            <b>Poker Trainer тренирует именно это:</b>
-          </p>
-          <p class="guide-text">
-            — <b>Логику</b> — умение выстроить линию так, чтобы оппонент совершил ошибку, а не просто «сыграл по чарту».
-          </p>
-          <p class="guide-text">
-            — <b>Интуицию</b> — умение считать исход раздачи из поля информации до того, как карты открылись.
-          </p>
-          <p class="guide-text">
-            — <b>Связку логики и интуиции</b> — потому что мало знать, кто сильнее на вскрытии. Нужно ещё выстроить действия так, чтобы выиграть у оппонента максимум фишек, а не просто забрать банк.
-          </p>
-          <p class="guide-text guide-heading">Почему тренировка против ботов учит играть против людей</p>
-          <p class="guide-text">
-            Здесь сразу возникает честный вопрос: «Я играю против ботов — при чём тут живые оппоненты?» Ответ простой: <b>навык, который вы здесь развиваете и оттачиваете, работает против любого соперника — и против человека, и против программы</b>. Читать линию поведения, замечать ошибки, выстраивать свои действия под чужое мышление — всё это не зависит от того, кто сидит напротив. Ваш мозг не различает, против кого он принимает решение. Он различает только одно: есть ли перед ним линия поведения, на которую нужно ответить, и есть ли у этой линии цель. Если есть — он учится читать её точно так же, как читал бы живого игрока.
-          </p>
-          <p class="guide-text">
-            Живой оппонент в покере отличается от идеального калькулятора не тем, что он человек, а тем, что у него есть <b>повторяющиеся ошибки</b>. Он помнит прошлые раздачи, меняет стиль, ловит вас на паттерне, ошибается под давлением. Всё это — не «человечность», а <b>поведение</b>. Поведение можно воспроизвести. Именно это и делают боты Poker Trainer.
-          </p>
-          <p class="guide-text guide-heading">Чем боты Poker Trainer отличаются от обычных ботов</p>
-          <p class="guide-text">
-            Обычный бот — это таблицы и расчёты. Он смотрит на свою руку, сверяется с чартом, расчётами и делает ход. Против такого бота вы не тренируетесь — вы просто решаете задачу. Настоящий тренажёр должен давать вам соперника, у которого есть <b>память, характер и способность меняться прямо во время игры</b>.
-          </p>
-          <p class="guide-text">
-            <b>Здесь боты — именно такие:</b>
-          </p>
-          <p class="guide-text">
-            — <b>PRO</b> — сильные, гибкие, адаптивные. Они не играют по фиксированным чартам. Они собирают статистику на всех игроков и на вас в том числе, во время всей сессии — как вы входите в игру, как фолдите на ставку, что показываете на вскрытии — и на основе этого строят вашу модель. Они меняют линии под вас: если вы овер-фолдите — давят именно туда; если коллите широко — сужают вэлью-беты и расширяют блефы. Они ведут себя как живые сильные регуляры.
-          </p>
-          <p class="guide-text">
-            — <b>VIP</b> — слабые, с системными ошибками. Один слишком тайтовый, другой коллит всё, третий рейзит без повода. Они не адаптируются — но именно поэтому их ошибки можно эксплуатировать, и именно на них вы учитесь видеть слабость и использовать её против них.
-          </p>
-          <p class="guide-text guide-heading">Против кого конкретно вы играете</p>
-          <p class="guide-text">
-            За столом Poker Trainer нет абстрактных «ботов». Есть характеры, повторяющие реальных игроков турниров. Игроки делятся на два класса и на четыре типа в каждом классе.
-          </p>
-          <p class="guide-text">
-            <b>Класс PRO — сильные соперники:</b>
-          </p>
-          <p class="guide-text">
-            <b>1. LAG-Pro</b> — топ мирового уровня. Постоянное давление, смена образа, ловушки, тонкие вэлью-беты, блефы в точных спотах. Против него работает только грамотная ловушка — а чтобы её построить, нужна идеальная логика.
-          </p>
-          <p class="guide-text">
-            <b>2. ICM-Exploiter</b> — турнирный расчёт в чистом виде. Он строит игру вокруг структуры выплат: на бабле тайтовеет и не рискует стеком без премиума, в призах давит на короткие стеки. Против него вы тренируете турнирные решения: когда риск оправдан, а когда нет.
-          </p>
-          <p class="guide-text">
-            <b>3. Solver-Hybrid</b> — быстро читает вас и адаптируется. Против него тренируется вариативность: как только он понял ваш паттерн, вы уже проиграли раздачу — учитесь не давать ему паттерн.
-          </p>
-          <p class="guide-text">
-            <b>4. GTO-Reg</b> — честный крепкий регуляр. Он играет ровно, не разваливается под давлением и не делает лишних ошибок. Против него вы тренируете фундамент: умение играть точно и дисциплинированно, без расчёта на то, что соперник сам отдаст фишки.
-          </p>
-          <p class="guide-text">
-            <b>Класс VIP — слабые соперники:</b>
-          </p>
-          <p class="guide-text">
-            <b>1. TAG-Lite</b> — знает базу, но играет роботизированно. Не адаптируется, слаб на ривере, его 3-беты предсказуемы. Против него вы учитесь ломать шаблон: баррелить там, где он всегда фолдит, и блефовать там, где он не ждёт.
-          </p>
-          <p class="guide-text">
-            <b>2. Loose-Passive</b> — коллит широко, агрессии почти нет, его рейз — всегда сила. Против него вы учитесь дисциплине: не блефовать и вэлью-бетить плотно. Это тренировка умения не тратить фишки там, где он не выкидывает.
-          </p>
-          <p class="guide-text">
-            <b>3. Rock</b> — только премиум-руки, абсолютно предсказуем. Если вошёл — у него рука. Против него вы учитесь читать слабость и забирать бесплатно: стилить блайнды постоянно и фолдить против его крупных ставок без сожалений.
-          </p>
-          <p class="guide-text">
-            <b>4. Maniac</b> — рейзит всё, блефует на всех улицах, играет на эмоциях. Против него вы учитесь терпению и хладнокровию: ждать руку, вэлью-бетить плотно и не блефовать вообще.
-          </p>
-          <p class="guide-text guide-heading">Почему это работает на реальном столе</p>
-          <p class="guide-text">
-            Когда вы потом сядете против живого игрока, вы <b>уже видели его тип</b> — потому что за столом Poker Trainer вы встречали его десятки раз. Вы уже знаете, как ведёт себя тайтовый рок, как давит на бабле ICM-игрок, как ловит вас LAG. Вы реагируете не на карты, а на <b>знакомое поведение</b>. И именно это делает тренировку настоящей.
-          </p>
-          <p class="guide-text">
-            Плюс: боты Poker Trainer учатся на вас быстрее, чем большинство живых соперников. Живой оппонент подстраивается за 50–100 раздач. В тренажёре подстройка происходит значительно быстрее: Solver-Hybrid ~ за 15, LAG ~ за 10. Это делает тренировку плотной: вы не тратите часы на пустую игру, каждый стол — это реальное сопротивление с первых раздач.
-          </p>
-          <p class="guide-text guide-heading">Как устроена игра</p>
-          <p class="guide-text">
-            Вы садитесь за стол из восьми игроков (вы и семь ботов) и играете турнир Sit &amp; Go с призовой структурой на три места. Каждая раздача — это отдельный урок. Каждое действие бота — это информация для вас. Каждый ваш ход — это попытка направить мышление оппонента туда, где он примет неверное решение и ошибётся в вашу пользу.
-          </p>
-          <p class="guide-text">
-            Обратная связь здесь честная и жёсткая: WIN или LOSS, плюс или минус фишек. Никаких подсказок, никаких оценок «правильно/неправильно». Только результат. Потому что в реальном покере никто не подсказывает — и тренироваться нужно так же.
-          </p>
-          <p class="guide-text guide-heading">Что даёт Poker Trainer лично вам</p>
-          <p class="guide-text">
-            — <b>Начинающему</b> — научиться думать за столом, а не запоминать руки. Понять, что покер — это не карты, а оппоненты и их решения.
-          </p>
-          <p class="guide-text">
-            — <b>Среднему игроку</b> — перестать играть «по учебнику» и начать играть против конкретного оппонента. Увидеть, где чарты вас ограничивают.
-          </p>
-          <p class="guide-text">
-            — <b>Профессионалу</b> — уйти от перегруженных математических решений к чистой логике и абсолютной интуиции. Найти то, что не считается в солвере: момент, ритм, образ, ловушку.
-          </p>
-        </div>
-
-      </div>
-
-      <button id="guide-scroll-top" type="button" aria-label="Наверх">▲</button>
-
-    </div>
-    <button id="btn-support-panel" type="button">Поддержать</button>
-  </div>
-
-  <div id="training-overlay">
-    <div id="training-window">
-      <div id="training-header-row">
-        <button id="training-prev-btn" class="training-nav-btn" type="button" aria-label="Назад" disabled>◀︎</button>
-        <h3>ТРЕНИРОВКА</h3>
-        <button id="training-next-btn" class="training-nav-btn" type="button" aria-label="Вперёд">▶︎</button>
-      </div>
-      <div id="training-text-viewport">
-        <div class="training-text-page active" data-page="0">
-          <p class="training-text">
-            Логика покера — это система мышления, при которой каждый твой ход является осознанным ответом на вопрос:
-            «Что я пытаюсь заставить оппонента подумать, почувствовать и сделать, а главное — зачем?»
-          </p>
-          <p class="training-text">
-            Ты не играешь карты. Ты играешь против мышления конкретного оппонента в конкретной ситуации.
-            Карты — лишь инструмент, которым ты управляешь его решениями.
-          </p>
-          <p class="training-text">
-            Ключевая идея: у каждого действия должна быть причина, которую ты можешь сформулировать словами.
-            Если не можешь — ты не играешь, а угадываешь.
-          </p>
-        </div>
-        <div class="training-text-page offscreen-right" data-page="1">
-          <p class="training-text">
-            Тренировка начинается с тишины: перед любым выбором — чай, встреча, звонок — на десять секунд закрой глаза и не думай, а просто отметь первое ощущение в теле. Не анализируй его, не спорь. Это и есть первый сигнал поля, который обычно заглушается мыслями.
-          </p>
-          <p class="training-text">
-            Дальше учись читать уже случившееся: вспомни событие дня и восстанови не логику, а состояние — что ты чувствовал за минуту до него. Повторяй это каждый вечер на трёх событиях. Так мозг начинает связывать внутренний сигнал с внешним результатом, и предчувствие перестаёт быть случайностью.
-          </p>
-          <p class="training-text">
-            Главный сдвиг — перестать ждать будущее и начать вспоминать его. Когда решение уже принято внутри, оно ощущается спокойно и буднично, как факт, который просто ещё не наступил. Тренируй это состояние на мелочах — какая очередь, кто позвонит, чем закончится разговор. Точность придёт не от усилия, а от доверия к первому тихому отклику.
-          </p>
-        </div>
-      </div>
-      <div id="training-test-buttons">
-        <button id="btn-test-hu" type="button">HU</button>
-        <button id="btn-test-top1" type="button">TOP-1</button>
-      </div>
-    </div>
-  </div>
-
   <div id="bottom-panel">
     <h3>Настройки</h3>
 
@@ -2544,118 +1568,6 @@ button.disabled {
       <input type="checkbox" id="set-show-all-showdown" />
     </label>
     <button id="btn-restart-panel" type="button">Начать заново</button>
-  </div>
-
-  <div id="support-overlay">
-    <div id="support-window">
-      <h3>ПОДДЕРЖИ АВТОРА</h3>
-
-      <div class="belcard-stack" id="belcard-stack">
-        <div class="belcard belcard-gold" data-card="gold">
-          <div class="belcard-top">
-            <div class="belcard-bank" translate="no"><span class="gold-gg">GG</span>POKER</div>
-            <div class="belcard-club-top" translate="no">Transfer</div>
-          </div>
-
-          <div class="belcard-chip"></div>
-
-          <div class="gold-nickname-row" translate="no">
-            <span class="gold-name-label">Nickname:</span>
-            <span class="copy-text gold-name-value" data-copy-value="Lucky Light">Lucky Light<span class="copy-icon"></span></span>
-          </div>
-
-          <div class="belcard-bottom">
-            <div class="belcard-bottom-line" translate="no">Balance: $</div>
-          </div>
-
-          <div class="belcard-copied" data-copied="en">Copied</div>
-        </div>
-
-        <div class="belcard belcard-gray" data-card="gray">
-          <div class="belcard-top">
-            <div class="belcard-bank" translate="no">Cryptocurrency</div>
-            <div class="belcard-club-top" translate="no">Tether</div>
-          </div>
-
-          <div class="belcard-chip"></div>
-
-          <div class="belcard-usdt-line" translate="no">
-            <span class="copy-text" data-copy-value="TNxHP8tVZUFhFyAxGGtmKEqEm9Cjhbck3A">TNxHP8tVZUFhFyAxGGtmKEqEm9Cjhbck3A<span class="copy-icon"></span></span>
-          </div>
-
-          <div class="belcard-bottom">
-            <div class="belcard-bottom-line" translate="no">USDT Tether → TRON (TRC20)</div>
-          </div>
-
-          <div class="belcard-copied" data-copied="en">Copied</div>
-        </div>
-
-        <div class="belcard belcard-blue" data-card="blue">
-          <div class="belcard-top">
-            <div class="belcard-bank" translate="no">BELARUSBANK</div>
-            <div class="belcard-club-top" translate="no">VISA</div>
-          </div>
-
-          <div class="belcard-chip"></div>
-
-          <a class="belcard-paysend" href="https://paysend.com/send" target="_blank" rel="noopener noreferrer" translate="no">PAYSEND</a>
-
-          <div class="belcard-number-row">
-            <div class="belcard-number" translate="no">
-              <span class="copy-text" data-copy-value="4255 1901 3916 7251">4255 1901 3916 7251<span class="copy-icon"></span></span>
-            </div>
-            <div class="belcard-currencies-top" translate="no">USD / EUR</div>
-          </div>
-
-          <div class="belcard-bottom">
-            <div class="belcard-name" translate="no">
-              <span class="copy-text" data-copy-value="TOM TOT">TOM TOT<span class="copy-icon"></span></span>
-            </div>
-          </div>
-
-          <div class="belcard-copied" data-copied="en">Copied</div>
-        </div>
-
-        <div class="belcard belcard-green" data-card="green">
-          <div class="belcard-top">
-            <div class="belcard-bank" translate="no">БЕЛАРУСБАНК</div>
-            <div class="belcard-club-top" translate="no">БЕЛКАРТ</div>
-          </div>
-
-          <div class="belcard-chip"></div>
-
-          <div class="belcard-number-row">
-            <div class="belcard-number" translate="no">
-              <span class="copy-text" data-copy-value="9112 3801 6012 8254">9112 3801 6012 8254<span class="copy-icon"></span></span>
-            </div>
-            <div class="belcard-currencies-top" translate="no">BYN / RUB</div>
-          </div>
-
-          <div class="belcard-bottom">
-            <div class="belcard-name" translate="no">
-              <span class="copy-text" data-copy-value="TOM TOT">TOM TOT<span class="copy-icon"></span></span>
-            </div>
-          </div>
-
-          <div class="belcard-copied" data-copied="ru">Скопировано</div>
-        </div>
-      </div>
-
-      <div id="support-footer">
-        <a class="lnd-contact-btn mail" id="gmail-btn" href="#" aria-label="Написать на Email">
-          <svg class="lnd-contact-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <rect x="5" y="8.5" width="22" height="15" rx="2.6" fill="none" stroke="#ffffff" stroke-width="2"/>
-            <path d="M6.5 10.6 L16 17.6 L25.5 10.6" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <span class="foot-center">Для развития приложения</span>
-        <a class="lnd-contact-btn tg" id="tg-btn" href="#" aria-label="Написать в Telegram" rel="noopener noreferrer">
-          <svg class="lnd-contact-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path fill="#ffffff" d="M23.06 9.07 8.32 14.76c-.98.4-.97 1.78.01 2.17l3.66 1.4 1.4 4.5c.2.64 1.02.82 1.48.32l1.98-2.14 3.86 2.83c.55.4 1.34.11 1.49-.56l2.66-12.62c.16-.75-.6-1.35-1.8-1.59zM12.7 17.36l8.02-5.02-6.55 6.14-.18 2.55-1.29-3.67z"/>
-          </svg>
-        </a>
-      </div>
-    </div>
   </div>
 
   <div id="final-overlay">
@@ -4064,7 +2976,7 @@ const Meta = (() => {
 
 
 /* ============================================================
-   BOTS   
+   BOTS
    ============================================================ */
 
 const Bots = (() => {
@@ -4700,13 +3612,6 @@ const UI = (() => {
     el.huGlow         = document.getElementById('hu-glow');
 
     el.bottomPanel    = document.getElementById('bottom-panel');
-    el.guidePanel     = document.getElementById('guide-panel');
-    el.guideTitle     = document.getElementById('guide-title');
-    el.guideFade      = document.getElementById('guide-fade');
-    el.guideViewport  = document.getElementById('guide-text-viewport');
-    el.guideScrollTop = document.getElementById('guide-scroll-top');
-    el.trainingOverlay= document.getElementById('training-overlay');
-    el.trainingWindow = document.getElementById('training-window');
     el.tapClose       = document.getElementById('tap-close');
 
     el.hnPrev         = document.getElementById('hn-prev');
@@ -4719,26 +3624,14 @@ const UI = (() => {
 
     el.heroTimerZone  = null;
 
-    el.supportOverlay = document.getElementById('support-overlay');
-    el.supportWindow  = document.getElementById('support-window');
-    el.btnSupportPanel = document.getElementById('btn-support-panel');
     el.settingsHelpBtn = document.getElementById('settings-help-btn');
     el.settingsCardBtn = document.getElementById('settings-card-btn');
     el.settingsTrainBtn = document.getElementById('settings-train-btn');
     el.topRoundRow     = document.getElementById('top-round-row');
-    el.gmailBtn        = document.getElementById('gmail-btn');
-    el.tgBtn           = document.getElementById('tg-btn');
-    el.belcardStack    = document.getElementById('belcard-stack');
 
     el.finalOverlay    = document.getElementById('final-overlay');
     el.finalDim        = document.getElementById('final-dim');
     el.finalFx         = document.getElementById('final-fx');
-    el.btnTestTop1     = document.getElementById('btn-test-top1');
-    el.btnTestHu       = document.getElementById('btn-test-hu');
-
-    el.trainingPrevBtn = document.getElementById('training-prev-btn');
-    el.trainingNextBtn = document.getElementById('training-next-btn');
-    el.trainingTextPages = document.querySelectorAll('.training-text-page');
 
     el.setLanguage       = document.getElementById('set-language');
     el.setDifficulty     = document.getElementById('set-difficulty');
@@ -4788,13 +3681,11 @@ const UI = (() => {
   }
 
   function updateOverlayState() {
-    const anyOpen = el.bottomPanel.classList.contains('open') ||
-                    el.guidePanel.classList.contains('open');
+    const anyOpen = el.bottomPanel.classList.contains('open');
     el.tapClose.classList.toggle('active', anyOpen);
   }
 
   function openBottomPanel() {
-    el.guidePanel.classList.remove('open');
     el.bottomPanel.classList.add('open');
     updateOverlayState();
   }
@@ -4802,91 +3693,17 @@ const UI = (() => {
     el.bottomPanel.classList.remove('open');
     updateOverlayState();
   }
-  function openGuidePanel() {
-    el.bottomPanel.classList.remove('open');
-    el.guidePanel.classList.add('open');
-    if (el.guideViewport) el.guideViewport.scrollTop = 0;
-    applyGuidePanelBottom();
-    updateOverlayState();
-    updateGuideFade();
-  }
-  function closeGuidePanel() {
-    el.guidePanel.classList.remove('open');
-    updateOverlayState();
-  }
   function closeAllPanels() {
     el.bottomPanel.classList.remove('open');
-    el.guidePanel.classList.remove('open');
     updateOverlayState();
-  }
-
-  function applyGuidePanelBottom() {
-    if (!el.guidePanel) return;
-    const historyAnchor = document.getElementById('hand-nav');
-    const appRect = document.getElementById('app').getBoundingClientRect();
-    if (!historyAnchor) {
-      el.guidePanel.style.bottom = '';
-      return;
-    }
-    const rowRect = historyAnchor.getBoundingClientRect();
-    if (rowRect.height <= 0) {
-      el.guidePanel.style.bottom = '';
-      return;
-    }
-    const bottomPx = appRect.bottom - rowRect.top + 8;
-    if (bottomPx > 0) {
-      el.guidePanel.style.bottom = bottomPx + 'px';
-    }
-  }
-
-  function updateGuideFade() {
-    if (!el.guideViewport) return;
-    const vp = el.guideViewport;
-    const scrollHeight = vp.scrollHeight;
-    const clientHeight = vp.clientHeight;
-    const scrollTop = vp.scrollTop;
-
-    const hasMoreBelow = (scrollTop + clientHeight) < (scrollHeight - 2);
-    vp.classList.toggle('has-more-bottom', hasMoreBelow);
-
-    if (el.guideScrollTop) {
-      const showTop = scrollTop > 2;
-      el.guideScrollTop.classList.toggle('visible', showTop);
-    }
-  }
-
-  function guideScrollToTop() {
-    if (!el.guideViewport) return;
-    try {
-      el.guideViewport.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (e) {
-      el.guideViewport.scrollTop = 0;
-    }
-  }
-
-  function openTraining() {
-    if (!el.trainingOverlay) return;
-    el.trainingOverlay.classList.add('visible');
-    const vp = document.getElementById('training-text-viewport');
-    if (vp) vp.scrollTop = 0;
-  }
-  function closeTraining() {
-    if (!el.trainingOverlay) return;
-    el.trainingOverlay.classList.remove('visible');
-  }
-  function anyTrainingOpen() {
-    return el.trainingOverlay && el.trainingOverlay.classList.contains('visible');
   }
 
   function anyPanelOpen() {
-    return el.bottomPanel.classList.contains('open') ||
-           el.guidePanel.classList.contains('open');
+    return el.bottomPanel.classList.contains('open');
   }
 
   function anyOverlayOpen() {
     return anyPanelOpen() ||
-           anyTrainingOpen() ||
-           (el.supportOverlay && el.supportOverlay.classList.contains('visible')) ||
            (el.finalOverlay && el.finalOverlay.classList.contains('visible'));
   }
 
@@ -4918,11 +3735,6 @@ const UI = (() => {
     el.topRoundRow.style.top = top + 'px';
   }
 
-  function placeGuidePanel() {
-    applyGuidePanelBottom();
-    updateGuideFade();
-  }
-
   function placeHandsHistoryRow() {
     /* Hands History теперь часть блока place-center. */
   }
@@ -4933,10 +3745,6 @@ const UI = (() => {
       if (Number(s.dataset.visualIndex) === visualIndex) return s;
     }
     return null;
-  }
-
-  function placeHeroTimer() {
-    /* Таймер живёт внутри места героя. */
   }
 
   function setTimerState(state) {
@@ -5072,7 +3880,6 @@ const UI = (() => {
     updateBoardAreaOffset();
     alignPercentBlockBottom();
     placeTopRoundRow();
-    placeGuidePanel();
     placeHandsHistoryRow();
     bindTimerZoneTap();
   }
@@ -5238,7 +4045,6 @@ const UI = (() => {
     updateBoardAreaOffset();
     alignPercentBlockBottom();
     placeTopRoundRow();
-    placeGuidePanel();
     placeHandsHistoryRow();
     bindTimerZoneTap();
   }
@@ -6291,65 +5097,6 @@ const UI = (() => {
     document.querySelectorAll('.seat.winner').forEach(s => s.classList.remove('winner'));
   }
 
-  function showSupportOverlay() {
-    if (!el.supportOverlay) return;
-    el.supportOverlay.classList.add('visible');
-  }
-
-  function hideSupportOverlay() {
-    if (!el.supportOverlay) return;
-    el.supportOverlay.classList.remove('visible');
-  }
-
-  function showCardCopiedHint(cardEl) {
-    if (!cardEl) return;
-    const hint = cardEl.querySelector('.belcard-copied');
-    if (!hint) return;
-    hint.classList.add('visible');
-    clearTimeout(hint._timer);
-    hint._timer = setTimeout(() => {
-      hint.classList.remove('visible');
-    }, 1200);
-  }
-
-  function copySupportText(text, cardEl) {
-    if (!text) { return; }
-    if (!cardEl) { return; }
-
-    let succeeded = false;
-
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed';
-      ta.style.top = '-1000px';
-      ta.style.left = '-1000px';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      ta.setSelectionRange(0, ta.value.length);
-      succeeded = document.execCommand && document.execCommand('copy');
-      document.body.removeChild(ta);
-    } catch (e) {
-      succeeded = false;
-    }
-
-    if (succeeded) {
-      showCardCopiedHint(cardEl);
-      return;
-    }
-
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          showCardCopiedHint(cardEl);
-        }).catch(() => {});
-      }
-    } catch (e) {}
-  }
-
   function showHandsHistoryCopied() {
     if (!el.handsHistoryCopied) return;
     el.handsHistoryCopied.classList.add('visible');
@@ -6362,278 +5109,6 @@ const UI = (() => {
   function setHandsHistoryPressed(pressed) {
     if (!el.handsHistoryRow) return;
     el.handsHistoryRow.classList.toggle('pressed', !!pressed);
-  }
-
-  let belcardApplyPositionsFn = null;
-  let belcardTopCardGetter = null;
-
-  function isTopBelcard(cardEl) {
-    if (!belcardTopCardGetter) return true;
-    return belcardTopCardGetter() === cardEl;
-  }
-
-  function resetBelcardSwap() {
-    if (el.belcardStack) {
-      el.belcardStack.classList.remove('dragging');
-      const cards = el.belcardStack.querySelectorAll('.belcard');
-      cards.forEach(c => { c.style.transition = ''; });
-      if (typeof belcardApplyPositionsFn === 'function') {
-        belcardApplyPositionsFn();
-      }
-    }
-  }
-
-  function bindBelcardDrag() {
-    if (!el.belcardStack) return;
-
-    const OFFSET = 8;
-    const LIFT = 8;
-    const SWIPE_THRESHOLD = 8;
-
-    const gold = el.belcardStack.querySelector('.belcard-gold');
-    const gray = el.belcardStack.querySelector('.belcard-gray');
-    const blue = el.belcardStack.querySelector('.belcard-blue');
-    const green = el.belcardStack.querySelector('.belcard-green');
-    if (!gold || !gray || !blue || !green) return;
-
-    const cards = { gold, gray, blue, green };
-
-    let order = ['gold', 'gray', 'blue', 'green'];
-
-    let startY = 0;
-    let dragging = false;
-    let currentLift = 0;
-    let isAnimating = false;
-
-    function topKey() { return order[0]; }
-
-    function zFor(pos) {
-      return 4 - pos;
-    }
-
-    function yFor(pos) {
-      return OFFSET * pos;
-    }
-
-    function applyPositions(animated) {
-      for (let i = 0; i < order.length; i++) {
-        const key = order[i];
-        const node = cards[key];
-        if (!node) continue;
-        if (!animated) node.style.transition = 'none';
-        else node.style.transition = 'transform .38s cubic-bezier(.22,.61,.36,1)';
-        node.style.transform = `translateY(${yFor(i)}px)`;
-        node.style.zIndex = String(zFor(i));
-      }
-      if (!animated) {
-        requestAnimationFrame(() => {
-          for (const key of order) {
-            const node = cards[key];
-            if (!node) continue;
-            node.style.transition = '';
-          }
-        });
-      }
-    }
-
-    belcardApplyPositionsFn = function() {
-      order = ['gold', 'gray', 'blue', 'green'];
-      applyPositions(false);
-    };
-
-    belcardTopCardGetter = function() {
-      return cards[order[0]];
-    };
-
-    function beginDragLift() {
-      const node = cards[topKey()];
-      if (!node) return;
-      node.style.transition = 'none';
-      node.style.transform = `translateY(${-currentLift}px)`;
-    }
-
-    function snapBackTop() {
-      const node = cards[topKey()];
-      if (!node) return;
-      node.style.transition = 'transform .26s cubic-bezier(.22,.61,.36,1)';
-      node.style.transform = `translateY(${yFor(0)}px)`;
-    }
-
-    function rotateOnce() {
-      if (isAnimating) return;
-      isAnimating = true;
-
-      const topNode = cards[order[0]];
-      const secondNode = cards[order[1]];
-      const thirdNode = cards[order[2]];
-      const fourthNode = cards[order[3]];
-
-      const newOrder = [order[1], order[2], order[3], order[0]];
-
-      topNode.style.transition = 'transform .38s cubic-bezier(.22,.61,.36,1)';
-      secondNode.style.transition = 'transform .38s cubic-bezier(.22,.61,.36,1)';
-      thirdNode.style.transition = 'transform .38s cubic-bezier(.22,.61,.36,1)';
-      fourthNode.style.transition = 'transform .38s cubic-bezier(.22,.61,.36,1)';
-
-      topNode.style.transform = `translateY(${OFFSET * 3}px)`;
-      secondNode.style.transform = `translateY(0px)`;
-      thirdNode.style.transform = `translateY(${OFFSET}px)`;
-      fourthNode.style.transform = `translateY(${OFFSET * 2}px)`;
-
-      topNode.style.zIndex = '1';
-      secondNode.style.zIndex = '4';
-      thirdNode.style.zIndex = '3';
-      fourthNode.style.zIndex = '2';
-
-      order = newOrder;
-
-      setTimeout(() => {
-        for (const key of order) {
-          const node = cards[key];
-          if (!node) continue;
-          node.style.transition = '';
-        }
-        applyPositions(false);
-        isAnimating = false;
-      }, 390);
-
-      currentLift = 0;
-    }
-
-    el.belcardStack.addEventListener('touchstart', (e) => {
-      if (isAnimating) return;
-      if (e.touches.length !== 1) return;
-      startY = e.touches[0].clientY;
-      dragging = false;
-      currentLift = 0;
-      el.belcardStack.classList.add('dragging');
-      const node = cards[topKey()];
-      if (node) node.style.transition = 'none';
-    }, { passive: true });
-
-    el.belcardStack.addEventListener('touchmove', (e) => {
-      if (isAnimating) return;
-      if (e.touches.length !== 1) return;
-      const y = e.touches[0].clientY;
-      const dy = startY - y;
-
-      if (!dragging) {
-        if (dy < -3) {
-          dragging = true;
-        } else if (dy > 3) {
-          dragging = true;
-        } else {
-          return;
-        }
-      }
-
-      if (dy > 0) {
-        currentLift = Math.max(0, Math.min(LIFT, dy));
-      } else {
-        currentLift = 0;
-      }
-
-      beginDragLift();
-      e.preventDefault();
-    }, { passive: false });
-
-    el.belcardStack.addEventListener('touchend', (e) => {
-      if (isAnimating) return;
-      el.belcardStack.classList.remove('dragging');
-      const wasDragging = dragging;
-      dragging = false;
-
-      if (!wasDragging) {
-        return;
-      }
-
-      if (currentLift >= SWIPE_THRESHOLD) {
-        rotateOnce();
-      } else {
-        snapBackTop();
-        currentLift = 0;
-        setTimeout(() => {
-          const node = cards[topKey()];
-          if (node) node.style.transition = '';
-        }, 280);
-      }
-    }, { passive: false });
-
-    el.belcardStack.addEventListener('touchcancel', () => {
-      if (isAnimating) return;
-      el.belcardStack.classList.remove('dragging');
-      dragging = false;
-      snapBackTop();
-      currentLift = 0;
-      setTimeout(() => {
-        const node = cards[topKey()];
-        if (node) node.style.transition = '';
-      }, 280);
-    }, { passive: true });
-
-    let mouseDown = false;
-    let mouseStartY = 0;
-    let mouseDragging = false;
-
-    el.belcardStack.addEventListener('mousedown', (e) => {
-      if (isAnimating) return;
-      if (e.button !== 0) return;
-      mouseDown = true;
-      mouseStartY = e.clientY;
-      mouseDragging = false;
-      currentLift = 0;
-      el.belcardStack.classList.add('dragging');
-      const node = cards[topKey()];
-      if (node) node.style.transition = 'none';
-      e.preventDefault();
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!mouseDown || isAnimating) return;
-      const y = e.clientY;
-      const dy = mouseStartY - y;
-      if (!mouseDragging) {
-        if (Math.abs(dy) < 3) return;
-        mouseDragging = true;
-      }
-      if (dy > 0) currentLift = Math.max(0, Math.min(LIFT, dy));
-      else currentLift = 0;
-      beginDragLift();
-    });
-
-    window.addEventListener('mouseup', (e) => {
-      if (!mouseDown) return;
-      mouseDown = false;
-      el.belcardStack.classList.remove('dragging');
-      if (isAnimating) return;
-      if (!mouseDragging) {
-        const node = cards[topKey()];
-        if (node) node.style.transition = '';
-        return;
-      }
-      mouseDragging = false;
-
-      if (currentLift >= SWIPE_THRESHOLD) {
-        rotateOnce();
-      } else {
-        snapBackTop();
-        currentLift = 0;
-        setTimeout(() => {
-          const node = cards[topKey()];
-          if (node) node.style.transition = '';
-        }, 280);
-      }
-    });
-
-    el.belcardStack.addEventListener('click', (e) => {
-      if (isAnimating) return;
-      if (e.detail !== 2) return;
-      e.preventDefault();
-      e.stopPropagation();
-      rotateOnce();
-    });
-
-    applyPositions(false);
   }
 
   function showFinalOverlay() {
@@ -6742,61 +5217,6 @@ const UI = (() => {
     }
   }
 
-  let trainingPageIndex = 0;
-  function setTrainingPage(index) {
-    const pages = el.trainingTextPages;
-    if (!pages || pages.length === 0) return;
-    if (index < 0) index = 0;
-    if (index > pages.length - 1) index = pages.length - 1;
-    if (index === trainingPageIndex && pages[trainingPageIndex].classList.contains('active')) return;
-
-    trainingPageIndex = index;
-
-    for (let i = 0; i < pages.length; i++) {
-      const p = pages[i];
-      p.classList.remove('active', 'offscreen-left', 'offscreen-right');
-      if (i < index) {
-        p.classList.add('offscreen-left');
-      } else if (i > index) {
-        p.classList.add('offscreen-right');
-      } else {
-        p.classList.add('active');
-      }
-    }
-
-    const vp = document.getElementById('training-text-viewport');
-    if (vp) vp.scrollTop = 0;
-
-    if (el.trainingPrevBtn) el.trainingPrevBtn.disabled = (index <= 0);
-    if (el.trainingNextBtn) el.trainingNextBtn.disabled = (index >= pages.length - 1);
-  }
-
-  function trainingNext() {
-    const pages = el.trainingTextPages;
-    if (!pages) return;
-    if (trainingPageIndex >= pages.length - 1) return;
-    setTrainingPage(trainingPageIndex + 1);
-  }
-  function trainingPrev() {
-    if (trainingPageIndex <= 0) return;
-    setTrainingPage(trainingPageIndex - 1);
-  }
-  function resetTrainingPage() {
-    trainingPageIndex = 0;
-    const pages = el.trainingTextPages;
-    if (!pages) return;
-    for (let i = 0; i < pages.length; i++) {
-      const p = pages[i];
-      p.classList.remove('active', 'offscreen-left', 'offscreen-right');
-      if (i === 0) p.classList.add('active');
-      else p.classList.add('offscreen-right');
-    }
-    const vp = document.getElementById('training-text-viewport');
-    if (vp) vp.scrollTop = 0;
-    if (el.trainingPrevBtn) el.trainingPrevBtn.disabled = true;
-    if (el.trainingNextBtn) el.trainingNextBtn.disabled = (pages.length <= 1);
-  }
-
   function relayoutSlider() {
     if (!sliderState.active) return;
     layoutSliderThumb();
@@ -6838,8 +5258,7 @@ const UI = (() => {
     updateStacks, updateActiveHighlight, clearActiveHighlight, updatePlaceCenter, updateBoardAreaOffset,
     alignPercentBlockBottom,
     showActions, setHeroActionsActive,
-    openBottomPanel, closeBottomPanel, openGuidePanel, closeGuidePanel,
-    openTraining, closeTraining, anyTrainingOpen,
+    openBottomPanel, closeBottomPanel,
     closeAllPanels, anyPanelOpen, anyOverlayOpen,
     updateHistoryInfo,
     readSettingsFromUI, applySettingsToUI,
@@ -6849,16 +5268,11 @@ const UI = (() => {
     clearWinnerHighlights,
     resetSliderToStart,
     setReplayButtonState,
-    showHeroTimer, hideHeroTimerActive, updateHeroTimer, placeHeroTimer,
+    showHeroTimer, hideHeroTimerActive, updateHeroTimer,
     setHeroTimerIdle, setHeroTimerReady, setHeroTimerOff, setHeroTimerZoneEnabled,
-    placeTopRoundRow, placeGuidePanel,
-    updateGuideFade, guideScrollToTop,
-    showSupportOverlay, hideSupportOverlay, copySupportText,
-    resetBelcardSwap, bindBelcardDrag,
-    isTopBelcard,
+    placeTopRoundRow,
     recalcSeatAssignments, resetSeatAssignments,
     showWinnerFinal, hideFinalOverlay, cancelFinalAutoReload,
-    trainingNext, trainingPrev, resetTrainingPage,
     updateHandsHistoryVisibility,
     showHandsHistoryCopied,
     setHandsHistoryPressed,
@@ -6889,9 +5303,7 @@ const UI = (() => {
     history: [], viewingIndex: -1, autoNextTimerId: null,
     botTimerId: null, revealTimerId: null,
     isPaused: false,
-    supportPaused: false,
     panelsPaused: false,
-    trainingPaused: false,
     finalShown: false,
 
     heroTimerIntervalId: null,
@@ -6934,16 +5346,13 @@ const UI = (() => {
     cacheDom();
     bindGlobalHandlers();
     UI.applySettingsToUI();
-    UI.bindBelcardDrag();
     bindDesktopDoubleClick();
-    bindCopyHandlers();
     bindHandsHistoryTap();
     bindHeroCardsHoldGesture();
     window.addEventListener('resize', () => {
       UI.updateBoardAreaOffset();
       UI.alignPercentBlockBottom();
       UI.placeTopRoundRow();
-      UI.placeGuidePanel();
       UI.relayoutSlider();
     });
     window.addEventListener('orientationchange', () => {
@@ -6951,7 +5360,6 @@ const UI = (() => {
         UI.updateBoardAreaOffset();
         UI.alignPercentBlockBottom();
         UI.placeTopRoundRow();
-        UI.placeGuidePanel();
         UI.relayoutSlider();
       }, 250);
     });
@@ -6965,9 +5373,6 @@ const UI = (() => {
     el.btnStart       = document.getElementById('btn-start');
     el.startOverlay   = document.getElementById('start-overlay');
     el.bottomPanel    = document.getElementById('bottom-panel');
-    el.guidePanel     = document.getElementById('guide-panel');
-    el.trainingOverlay= document.getElementById('training-overlay');
-    el.trainingWindow = document.getElementById('training-window');
     el.tapClose       = document.getElementById('tap-close');
     el.hnPrev         = document.getElementById('hn-prev');
     el.hnNext         = document.getElementById('hn-next');
@@ -6975,29 +5380,16 @@ const UI = (() => {
     el.hnResume       = document.getElementById('hn-resume');
     el.hnSettings     = document.getElementById('hn-settings');
     el.btnRestartPanel = document.getElementById('btn-restart-panel');
-    el.btnSupportPanel = document.getElementById('btn-support-panel');
     el.settingsHelpBtn = document.getElementById('settings-help-btn');
     el.settingsCardBtn = document.getElementById('settings-card-btn');
     el.settingsTrainBtn = document.getElementById('settings-train-btn');
     el.topRoundRow     = document.getElementById('top-round-row');
-    el.gmailBtn        = document.getElementById('gmail-btn');
-    el.tgBtn           = document.getElementById('tg-btn');
     el.app            = document.getElementById('app');
     el.seats          = document.getElementById('seats');
-    el.supportOverlay = document.getElementById('support-overlay');
-    el.supportWindow  = document.getElementById('support-window');
-    el.belcardStack   = document.getElementById('belcard-stack');
     el.placeCenter    = document.getElementById('place-center');
-    el.guidePanel     = document.getElementById('guide-panel');
-    el.guideViewport  = document.getElementById('guide-text-viewport');
-    el.guideScrollTop = document.getElementById('guide-scroll-top');
     el.finalOverlay   = document.getElementById('final-overlay');
     el.finalDim       = document.getElementById('final-dim');
     el.finalFx        = document.getElementById('final-fx');
-    el.btnTestTop1    = document.getElementById('btn-test-top1');
-    el.btnTestHu      = document.getElementById('btn-test-hu');
-    el.trainingPrevBtn = document.getElementById('training-prev-btn');
-    el.trainingNextBtn = document.getElementById('training-next-btn');
     el.handsHistoryRow = document.getElementById('hands-history-row');
     el.handsHistoryLabel = document.getElementById('hands-history-label');
     el.handsHistoryCopied = document.getElementById('hands-history-copied');
@@ -7072,34 +5464,6 @@ const UI = (() => {
   function clearStreetRevealTimers() {
     for (const t of session.streetRevealTimers) clearTimeout(t);
     session.streetRevealTimers = [];
-  }
-
-  function bindCopyHandlers() {
-    if (!el.supportWindow) return;
-
-    let lastCopyTs = 0;
-    const COPY_COOLDOWN = 400;
-
-    el.supportWindow.addEventListener('click', (e) => {
-      const target = e.target;
-      if (!target) return;
-
-      if (target.closest('.belcard-paysend')) return;
-
-      const copyEl = target.closest('.copy-text');
-      if (!copyEl) return;
-
-      const card = copyEl.closest('.belcard');
-      if (!card) return;
-      if (!UI.isTopBelcard(card)) return;
-
-      const now = Date.now();
-      if (now - lastCopyTs < COPY_COOLDOWN) return;
-      lastCopyTs = now;
-
-      const text = copyEl.getAttribute('data-copy-value') || copyEl.textContent.trim();
-      UI.copySupportText(text, card);
-    }, { passive: true });
   }
 
   function bindHandsHistoryTap() {
@@ -7389,13 +5753,10 @@ const UI = (() => {
               target.closest('select') ||
               target.closest('a') ||
               target.closest('#bottom-panel') ||
-              target.closest('#guide-panel') ||
-              target.closest('#training-overlay') ||
               target.closest('#start-overlay') ||
               target.closest('#hero-actions') ||
               target.closest('#quick-percent-list') ||
               target.closest('.hero-timer-zone') ||
-              target.closest('#support-overlay') ||
               target.closest('#final-overlay') ||
               target.closest('#top-round-row') ||
               target.closest('#hands-history-row'));
@@ -7505,8 +5866,6 @@ const UI = (() => {
       if (Math.abs(dx) > Math.abs(dy)) return;
       if (dy < 0) {
         openPanelWithPause(UI.openBottomPanel);
-      } else {
-        openPanelWithPause(UI.openGuidePanel);
       }
     }, { passive: true });
 
@@ -7528,47 +5887,13 @@ const UI = (() => {
       }
     }, { passive: true });
 
-    if (el.guidePanel) {
-      el.guidePanel.addEventListener('click', (e) => e.stopPropagation());
-      el.guidePanel.addEventListener('touchend', (e) => e.stopPropagation(), { passive: false });
-    }
-
-    if (el.guideViewport) {
-      el.guideViewport.addEventListener('scroll', () => { UI.updateGuideFade(); }, { passive: true });
-    }
-
-    if (el.guideScrollTop) {
-      const goTop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        UI.guideScrollToTop();
-      };
-      el.guideScrollTop.addEventListener('click', goTop);
-      el.guideScrollTop.addEventListener('touchend', goTop, { passive: false });
-    }
-
-    if (el.supportOverlay) {
-      el.supportOverlay.addEventListener('click', (e) => {
-        if (e.target === el.supportOverlay) {
-          closeSupportWindow();
-        }
-      });
-      el.supportOverlay.addEventListener('touchend', (e) => {
-        if (e.target === el.supportOverlay) {
-          e.preventDefault();
-          e.stopPropagation();
-          closeSupportWindow();
-        }
-      }, { passive: false });
-    }
-
     if (el.finalOverlay) {
       const dismissFinal = (e) => {
         e.preventDefault();
         e.stopPropagation();
         UI.hideFinalOverlay();
         UI.cancelFinalAutoReload();
-        if (!session.panelsPaused && !session.supportPaused && !session.trainingPaused && !UI.anyPanelOpen() && !inHistoryMode()) {
+        if (!session.panelsPaused && !UI.anyPanelOpen() && !inHistoryMode()) {
           resumeGame();
         }
       };
@@ -7576,96 +5901,14 @@ const UI = (() => {
       el.finalOverlay.addEventListener('touchend', dismissFinal, { passive: false });
     }
 
-    if (el.trainingOverlay) {
-      el.trainingOverlay.addEventListener('click', (e) => {
-        if (e.target === el.trainingOverlay) {
-          closeTrainingWindow();
-        }
-      });
-      el.trainingOverlay.addEventListener('touchend', (e) => {
-        if (e.target === el.trainingOverlay) {
-          e.preventDefault();
-          e.stopPropagation();
-          closeTrainingWindow();
-        }
-      }, { passive: false });
-    }
-
-    if (el.trainingWindow) {
-      el.trainingWindow.addEventListener('click', (e) => e.stopPropagation());
-      el.trainingWindow.addEventListener('touchend', (e) => e.stopPropagation(), { passive: false });
-      el.trainingWindow.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
-      el.trainingWindow.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
-    }
-
-    if (el.trainingPrevBtn) {
-      el.trainingPrevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        UI.trainingPrev();
-      });
-      el.trainingPrevBtn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        UI.trainingPrev();
-      }, { passive: false });
-    }
-    if (el.trainingNextBtn) {
-      el.trainingNextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        UI.trainingNext();
-      });
-      el.trainingNextBtn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        UI.trainingNext();
-      }, { passive: false });
-    }
-
-    if (el.btnTestHu) {
-      const onHu = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        session.huGlowOn = !session.huGlowOn;
-        updateHuGlowFromState();
-      };
-      el.btnTestHu.addEventListener('click', onHu);
-      el.btnTestHu.addEventListener('touchend', onHu, { passive: false });
-    }
-
-    if (el.btnTestTop1) {
-      el.btnTestTop1.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        closeTrainingWindow();
-        UI.showWinnerFinal();
-      });
-    }
-
-    if (el.btnSupportPanel) {
-      el.btnSupportPanel.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openSupportWindow();
-      });
-      el.btnSupportPanel.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openSupportWindow();
-      }, { passive: false });
-    }
-
     if (el.settingsHelpBtn) {
       el.settingsHelpBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openGuideWithoutClosing();
       });
       el.settingsHelpBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openGuideWithoutClosing();
       }, { passive: false });
     }
 
@@ -7673,12 +5916,10 @@ const UI = (() => {
       el.settingsCardBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openSupportOverEverything();
       });
       el.settingsCardBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openSupportOverEverything();
       }, { passive: false });
     }
 
@@ -7686,44 +5927,11 @@ const UI = (() => {
       el.settingsTrainBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openTrainingWindow();
       });
       el.settingsTrainBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        openTrainingWindow();
       }, { passive: false });
-    }
-
-    if (el.gmailBtn) {
-      const openMail = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        try {
-          const scheme = ['ma','il','to',':'].join('');
-          const user = ['the','tom','tot'].join('');
-          const domain = ['gm','ail','.','com'].join('');
-          const address = user + '@' + domain;
-          window.location.href = scheme + address;
-        } catch (err) {}
-      };
-      el.gmailBtn.addEventListener('click', openMail);
-      el.gmailBtn.addEventListener('touchend', openMail, { passive: false });
-    }
-
-    if (el.tgBtn) {
-      const openTg = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        try {
-          const scheme = ['ht','tp','s',':','/','/'].join('');
-          const host = ['t','.','me','/'].join('');
-          const user = ['the','tom','tot'].join('');
-          window.open(scheme + host + user, '_blank', 'noopener,noreferrer');
-        } catch (err) {}
-      };
-      el.tgBtn.addEventListener('click', openTg);
-      el.tgBtn.addEventListener('touchend', openTg, { passive: false });
     }
 
     if (el.bottomPanel) {
@@ -7777,7 +5985,6 @@ const UI = (() => {
   }
 
   function openPanelWithPause(openFn) {
-    if (session.supportPaused) return;
     if (UI.anyOverlayOpen()) return;
     openFn();
     if (inHistoryMode()) {
@@ -7793,86 +6000,9 @@ const UI = (() => {
     UI.closeAllPanels();
     if (wasOpen && session.panelsPaused) {
       session.panelsPaused = false;
-      if (!session.supportPaused && !session.trainingPaused && !inHistoryMode()) {
+      if (!inHistoryMode()) {
         resumeGame();
       }
-    }
-    if (inHistoryMode()) {
-      resumeReplayIfPausedByWindow();
-    }
-  }
-
-  function openGuideWithoutClosing() {
-    if (UI.el.guidePanel.classList.contains('open')) return;
-    UI.el.bottomPanel.classList.remove('open');
-    UI.el.guidePanel.classList.add('open');
-    UI.el.tapClose.classList.toggle('active', true);
-    if (UI.el.guideViewport) UI.el.guideViewport.scrollTop = 0;
-    UI.placeGuidePanel();
-    if (!session.supportPaused && !session.trainingPaused) {
-      if (inHistoryMode()) {
-        pauseReplayIfActive();
-      } else {
-        pauseGame();
-        session.panelsPaused = true;
-      }
-    }
-  }
-
-  function openSupportOverEverything() {
-    if (session.supportPaused) return;
-    session.supportPaused = true;
-    if (inHistoryMode()) {
-      pauseReplayIfActive();
-    } else {
-      pauseGame();
-    }
-    UI.resetBelcardSwap();
-    UI.showSupportOverlay();
-  }
-
-  function openSupportWindow() {
-    if (session.supportPaused) return;
-    session.supportPaused = true;
-    if (inHistoryMode()) {
-      pauseReplayIfActive();
-    } else {
-      pauseGame();
-    }
-    UI.resetBelcardSwap();
-    UI.showSupportOverlay();
-  }
-
-  function closeSupportWindow() {
-    if (!session.supportPaused) return;
-    session.supportPaused = false;
-    UI.hideSupportOverlay();
-    if (!session.panelsPaused && !session.trainingPaused && !UI.anyPanelOpen() && !inHistoryMode()) {
-      resumeGame();
-    }
-    if (inHistoryMode()) {
-      resumeReplayIfPausedByWindow();
-    }
-  }
-
-  function openTrainingWindow() {
-    if (session.trainingPaused) return;
-    session.trainingPaused = true;
-    if (inHistoryMode()) {
-      pauseReplayIfActive();
-    } else {
-      pauseGame();
-    }
-    UI.resetTrainingPage();
-    UI.openTraining();
-  }
-
-  function closeTrainingWindow() {
-    if (!session.trainingPaused) return;
-    session.trainingPaused = false;
-    UI.closeTraining();
-    if (!session.panelsPaused && !session.supportPaused && !UI.anyPanelOpen() && !inHistoryMode()) {
-      resumeGame();
     }
     if (inHistoryMode()) {
       resumeReplayIfPausedByWindow();
@@ -8021,9 +6151,7 @@ const UI = (() => {
     session.heroFinishPlace = 0;
     session.tournamentOver = false;
     session.isPaused = false;
-    session.supportPaused = false;
     session.panelsPaused = false;
-    session.trainingPaused = false;
     session.finalShown = false;
     session.replay.pausedByWindow = false;
     session.huGlowOn = false;
@@ -8033,11 +6161,8 @@ const UI = (() => {
     Meta.reset();
     UI.resetSeatAssignments();
 
-    UI.hideSupportOverlay();
-    UI.closeTraining();
     UI.hideFinalOverlay();
     UI.cancelFinalAutoReload();
-    UI.resetBelcardSwap();
     UI.setHeroActionsActive(false);
     UI.updateHistoryInfo(0, 0, false);
     UI.clearWinnerHighlights();
@@ -8069,9 +6194,7 @@ const UI = (() => {
     session.history = [];
     session.viewingIndex = -1;
     session.isPaused = false;
-    session.supportPaused = false;
     session.panelsPaused = false;
-    session.trainingPaused = false;
     session.finalShown = false;
     session.replay.pausedByWindow = false;
     session.huAutoActive = false;
@@ -8611,9 +6734,7 @@ const UI = (() => {
       if (session.viewingIndex >= 0) return;
       if (session.isPaused) return;
       if (session.replay.active) return;
-      if (session.supportPaused) return;
       if (session.panelsPaused) return;
-      if (session.trainingPaused) return;
 
       const period = UI.settings.blindGrowthHands || 10;
       state.handsAtLevel++;
@@ -9175,8 +7296,6 @@ const UI = (() => {
   }
 
   function resumeGame() {
-    if (session.supportPaused) return;
-    if (session.trainingPaused) return;
     if (UI.anyPanelOpen()) return;
 
     stopReplay(true);
@@ -9208,9 +7327,7 @@ const UI = (() => {
           if (session.viewingIndex >= 0) return;
           if (session.isPaused) return;
           if (session.replay.active) return;
-          if (session.supportPaused) return;
           if (session.panelsPaused) return;
-          if (session.trainingPaused) return;
 
           const period = UI.settings.blindGrowthHands || 10;
           state.handsAtLevel++;
