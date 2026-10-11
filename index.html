@@ -1255,7 +1255,6 @@ button.disabled {
   -ms-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-  /* Свечение убрано в состоянии покоя */
   filter: none;
   transition: opacity .18s ease, filter .18s ease, transform .12s ease;
   text-decoration: none;
@@ -1274,7 +1273,6 @@ button.disabled {
   pointer-events: none;
 }
 
-/* Сердечко в покое — яркий вариант без свечения */
 .top-icon-btn.top-icon-btn--heart {
   color: var(--ph-heart-bright);
   filter: none;
@@ -1290,7 +1288,6 @@ button.disabled {
   background: transparent;
 }
 
-/* При нажатии свечение как было */
 .top-icon-btn:active {
   transform: scale(0.9);
   opacity: 1;
@@ -1301,7 +1298,6 @@ button.disabled {
   filter: drop-shadow(0 0 9px rgba(184,146,74,.95)) drop-shadow(0 0 22px rgba(184,146,74,.6));
 }
 
-/* При наведении свечение как было */
 @media (hover: hover) {
   .top-icon-btn:hover {
     opacity: .95;
@@ -1315,6 +1311,7 @@ button.disabled {
 .top-icon-btn.top-icon-btn-tg {
   width: 26px;
   height: 26px;
+  margin-left: 2px;
 }
 
 .top-icon-btn.top-icon-btn-tg svg {
@@ -1324,10 +1321,12 @@ button.disabled {
   transform: translateX(-6px);
 }
 
-/* Мобильная версия — иконки ближе друг к другу */
 @media (max-width: 767px) {
   #top-round-row {
     gap: 12px;
+  }
+  .top-icon-btn.top-icon-btn-tg {
+    margin-left: 2px;
   }
 }
 
