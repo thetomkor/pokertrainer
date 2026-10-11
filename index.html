@@ -63,8 +63,6 @@
   --belcard-lift: 8px;
 
   --table-col-w: min(94vw, calc((100vh - clamp(8px, 1.6vmin, 20px)) * 9 / 16));
-
-  --champ-size: min(65%, 323px);
 }
 
 html, body {
@@ -282,7 +280,7 @@ button.disabled {
   position: absolute;
   border: 1px solid #a8a8a8;
   border-radius: 1px;
-  background: transparent;
+  background: #4a4a4a;
 }
 .hh-copy-icon::before {
   width: 4px;
@@ -637,8 +635,6 @@ button.disabled {
   display: inline-block;
 }
 
-/* У ботов стек и delta-текст не перехватывают тап.
-   У героя стек оставляем кликабельным (двойной тап — BB / фишки). */
 .seat:not(.hero) .stack,
 .seat .delta-text {
   pointer-events: none;
@@ -782,9 +778,6 @@ button.disabled {
 }
 .seat .bet-chips.hidden { display: none; }
 
-/* Таймер внутри места героя, привязан к блоку карт.
-   Тап-зона и визуальный круг лежат внутри одного родителя (.seat-cards)
-   и используют одни и те же координаты, поэтому центрируются одинаково. */
 .seat .hero-timer-wrap,
 .seat .hero-timer-zone {
   position: absolute;
@@ -813,8 +806,6 @@ button.disabled {
   pointer-events: none;
 }
 
-/* Постоянный композитный слой, чтобы при смене прозрачности
-   таймер не смещался на 1 пиксель. */
 .seat .hero-timer-wrap .hero-timer-svg {
   width: 100%;
   height: 100%;
@@ -1607,8 +1598,6 @@ button.disabled {
 #hn-replay { color: var(--gold); }
 #hn-settings { color: var(--gold); }
 
-/* Иконка шестерёнки на кнопке Настройки — SVG. По размеру
-   на 2 пикселя больше остальных символов панели истории раздач. */
 #hn-settings .hn-settings-svg {
   display: block;
   width: calc(var(--nav-icon-size) + 2px);
@@ -1617,8 +1606,6 @@ button.disabled {
   pointer-events: none;
 }
 
-/* На мобильной версии символы панели истории раздач — того же размера,
-   что и шестерёнка. На десктопе — размеры не меняются. */
 @media (max-width: 767px) {
   #hand-nav button {
     font-size: calc(var(--nav-icon-size) + 2px);
@@ -2213,17 +2200,6 @@ button.disabled {
   contain: strict;
 }
 
-#final-champ {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  transform: translateZ(0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 #final-fx {
   position: absolute;
   inset: 0;
@@ -2231,33 +2207,6 @@ button.disabled {
   pointer-events: none;
   transform: translateZ(0);
   contain: strict;
-}
-
-#champion-icon {
-  position: relative;
-  width: var(--champ-size);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  background: #ffffff;
-  pointer-events: none;
-  z-index: 1;
-  animation: championGlow 2.4s ease-in-out infinite;
-  will-change: box-shadow;
-}
-
-@keyframes championGlow {
-  0%, 100% {
-    box-shadow:
-      0 0 14px rgba(255,203,43,.45),
-      0 0 30px rgba(255,203,43,.28),
-      0 0 55px rgba(255,203,43,.15);
-  }
-  50% {
-    box-shadow:
-      0 0 26px rgba(255,203,43,.95),
-      0 0 55px rgba(255,203,43,.65),
-      0 0 95px rgba(255,203,43,.38);
-  }
 }
 
 .firework {
@@ -2289,12 +2238,6 @@ button.disabled {
   100% {
     opacity: 0;
     transform: translate(var(--dx), var(--dy)) scale(0.2);
-  }
-}
-
-@media (min-width: 768px) {
-  :root {
-    --champ-size: min(81%, 333px);
   }
 }
 </style>
@@ -2717,9 +2660,6 @@ button.disabled {
 
   <div id="final-overlay">
     <div id="final-dim"></div>
-    <div id="final-champ">
-      <div id="champion-icon"></div>
-    </div>
     <div id="final-fx"></div>
   </div>
 
@@ -4792,9 +4732,7 @@ const UI = (() => {
 
     el.finalOverlay    = document.getElementById('final-overlay');
     el.finalDim        = document.getElementById('final-dim');
-    el.finalChamp      = document.getElementById('final-champ');
     el.finalFx         = document.getElementById('final-fx');
-    el.championIcon    = document.getElementById('champion-icon');
     el.btnTestTop1     = document.getElementById('btn-test-top1');
     el.btnTestHu       = document.getElementById('btn-test-hu');
 
@@ -4986,8 +4924,7 @@ const UI = (() => {
   }
 
   function placeHandsHistoryRow() {
-    /* Hands History теперь часть блока place-center — отдельное
-       позиционирование по местам 2 и 6 больше не нужно. */
+    /* Hands History теперь часть блока place-center. */
   }
 
   function findSeatByVisualIndex(visualIndex) {
@@ -4999,7 +4936,7 @@ const UI = (() => {
   }
 
   function placeHeroTimer() {
-    /* Таймер живёт внутри места героя. Ничего пересчитывать не нужно. */
+    /* Таймер живёт внутри места героя. */
   }
 
   function setTimerState(state) {
@@ -5409,10 +5346,8 @@ const UI = (() => {
 
     let show;
     if (state.handOver && state.showdownResults && !state.showdownResults.uncontested) {
-      /* На вскрытии карты героя показываются всегда, даже если опция скрытия включена. */
       show = true;
     } else if (settings.hideHeroHand && player.isHero) {
-      /* Скрытие карт героя включено и это не вскрытие. */
       show = false;
     } else if (settings.showAllHands) {
       show = true;
@@ -6790,7 +6725,7 @@ const UI = (() => {
   }
 
   function showWinnerFinal() {
-    if (!el.championIcon || !el.finalOverlay) return;
+    if (!el.finalOverlay) return;
     showFinalOverlay();
     launchFinaleFireworks();
 
@@ -7058,9 +6993,7 @@ const UI = (() => {
     el.guideScrollTop = document.getElementById('guide-scroll-top');
     el.finalOverlay   = document.getElementById('final-overlay');
     el.finalDim       = document.getElementById('final-dim');
-    el.finalChamp     = document.getElementById('final-champ');
     el.finalFx        = document.getElementById('final-fx');
-    el.championIcon   = document.getElementById('champion-icon');
     el.btnTestTop1    = document.getElementById('btn-test-top1');
     el.btnTestHu      = document.getElementById('btn-test-hu');
     el.trainingPrevBtn = document.getElementById('training-prev-btn');
@@ -8399,7 +8332,6 @@ const UI = (() => {
 
   function botTurn(bot, idx) {
     const state = session.state;
-    /* Время перед действием бота — всегда 1 секунда. */
     const delay = 1000;
     clearTimeout(session.botTimerId);
     session.botTimerId = setTimeout(() => {
