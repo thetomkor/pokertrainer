@@ -1416,6 +1416,20 @@ button.disabled {
   transform: translateX(-6px);
 }
 
+/* Глобус: без прямоугольной подложки при нажатии */
+#top-cards-btn,
+#top-cards-btn:hover,
+#top-cards-btn:active,
+#top-cards-btn:focus,
+#top-cards-btn:focus-visible,
+#top-cards-btn:focus-within {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 @media (max-width: 767px) {
   #top-round-row {
     gap: 12px;
@@ -2339,10 +2353,7 @@ button.disabled {
 <script>
 /* ============================================================
    HARD LONG-PRESS KILLER FOR GLOBE BUTTON ONLY
-   Точечная страховка именно для глобуса: убирает квадратик
-   долгого тапа в мобильных браузерах.
-   Гасит выделение на самой кнопке и на всех её внутренних
-   фигурах, чтобы браузер не мог зацепиться ни за что.
+   Точечная страховка именно для глобуса.
    ============================================================ */
 (function() {
   try {
