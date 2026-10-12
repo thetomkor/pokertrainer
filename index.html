@@ -1279,6 +1279,7 @@ button.disabled {
   box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
 }
 
+/* Панель иконок: невидимый держатель, никакой собственной коробки */
 #top-round-row {
   position: absolute;
   display: flex;
@@ -1286,7 +1287,7 @@ button.disabled {
   justify-content: flex-start;
   gap: 22px;
   z-index: 120;
-  pointer-events: auto;
+  pointer-events: none;
   left: 0;
   top: 0;
   opacity: 0.85;
@@ -1297,32 +1298,49 @@ button.disabled {
   user-select: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   touch-action: manipulation;
-  /* Убираем подсветку самой строки как блока */
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
+  background: none;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
   -webkit-appearance: none;
   appearance: none;
   -webkit-focus-ring-color: transparent;
+  /* Полностью убираем панель как видимый бокс */
+  contain: layout style;
+  isolation: isolate;
 }
 
 #top-round-row:active,
 #top-round-row:focus,
 #top-round-row:focus-visible,
 #top-round-row:focus-within,
-#top-round-row:hover {
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
+#top-round-row:hover,
+#top-round-row:target,
+#top-round-row:checked,
+#top-round-row:visited,
+#top-round-row:link {
+  background: none !important;
+  border: 0 !important;
+  outline: 0 !important;
   box-shadow: none !important;
-  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  -webkit-tap-highlight-color: transparent !important;
   -webkit-focus-ring-color: transparent !important;
+  color: inherit !important;
+}
+
+#top-round-row::before,
+#top-round-row::after {
+  content: none !important;
+  display: none !important;
 }
 
 #top-round-row::selection,
 #top-round-row *::selection {
   background: transparent;
+}
+
+#top-round-row > * {
+  pointer-events: auto;
 }
 
 .top-icon-btn {
@@ -2310,9 +2328,6 @@ button.disabled {
 <script>
 /* ============================================================
    LONG-PRESS KILLER (для верхней панели иконок)
-   Убирает системный long-press highlight во ВСЕХ браузерах:
-   Safari iOS, Chrome Android, Firefox Mobile.
-   Обычные тапы продолжают работать.
    ============================================================ */
 (function() {
   try {
@@ -2379,7 +2394,6 @@ button.disabled {
 <script>
 /* ============================================================
    HARD LONG-PRESS KILLER FOR GLOBE BUTTON ONLY
-   Точечная страховка именно для глобуса.
    ============================================================ */
 (function() {
   try {
