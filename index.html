@@ -4240,7 +4240,10 @@ const UI = (() => {
       anchorTopInTable = (haRect.top - tableRect.top) - GAP_ABOVE_HAND_NAV - rowHeight;
     }
 
-    const anchorLeftInTable = 0;
+    const tableColW = Math.min(window.innerWidth * 0.94, tableRect.width);
+    const tableLeftInTable = (tableRect.width - tableColW) / 2;
+    const haRect = el.heroActions.getBoundingClientRect();
+    const anchorLeftInTable = (haRect.left - tableRect.left);
 
     const left = (tableRect.left - dockRect.left) + anchorLeftInTable;
     const top = (tableRect.top - dockRect.top) + anchorTopInTable;
