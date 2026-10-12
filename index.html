@@ -1282,6 +1282,8 @@ button.disabled {
 /* ============================================================
    TOP-DOCK — отдельный блок иконок поверх ВСЕХ блоков и слоёв
    Слой 130 — ниже окна настроек (140), выше стола и сцены.
+   Позиционируется от #poker-table, чтобы выровняться
+   по левому краю панели истории раздач.
    ============================================================ */
 #top-dock {
   position: absolute;
@@ -1392,6 +1394,8 @@ button.disabled {
   pointer-events: auto;
 }
 
+/* Обёртка вокруг иконки: фиксированный размер, визуальное сжатие
+   не влияет на поток и на соседей. */
 .top-icon-slot {
   display: inline-flex;
   align-items: center;
@@ -1401,7 +1405,6 @@ button.disabled {
   flex: 0 0 26px;
   position: relative;
   pointer-events: auto;
-  overflow: visible;
 }
 
 .top-icon-btn {
@@ -1512,7 +1515,7 @@ button.disabled {
   }
 }
 
-/* Самолётик: слот 26×26, крупная иконка 38×38 центрируется внутри слота. */
+/* Самолётик: крупная иконка центрируется внутри своего слота. */
 .top-icon-btn.top-icon-btn-tg {
   width: 26px;
   height: 26px;
@@ -2219,7 +2222,7 @@ button.disabled {
     </div>
   </div>
 
-  <!-- TOP-DOCK -->
+  <!-- TOP-DOCK: отдельный блок иконок, слой 130 — ниже настроек (140) -->
   <div id="top-dock">
     <div id="top-round-row">
       <span class="top-icon-slot">
@@ -2398,6 +2401,7 @@ button.disabled {
 <script>
 /* ============================================================
    LONG-PRESS KILLER (для верхней панели иконок)
+   Важно: НЕ гасим обычные тапы — только выделение и контекстное меню.
    ============================================================ */
 (function() {
   try {
@@ -2405,23 +2409,15 @@ button.disabled {
       if (!el) return;
 
       el.addEventListener('touchstart', function(e) {
-        e.stopPropagation();
         if (e.cancelable) e.preventDefault();
       }, { passive: false, capture: true });
 
       el.addEventListener('touchmove', function(e) {
-        e.stopPropagation();
-        if (e.cancelable) e.preventDefault();
-      }, { passive: false, capture: true });
-
-      el.addEventListener('touchend', function(e) {
-        e.stopPropagation();
         if (e.cancelable) e.preventDefault();
       }, { passive: false, capture: true });
 
       el.addEventListener('contextmenu', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         return false;
       }, { passive: false, capture: true });
 
