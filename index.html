@@ -1297,6 +1297,32 @@ button.disabled {
   user-select: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   touch-action: manipulation;
+  /* Убираем подсветку самой строки как блока */
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-focus-ring-color: transparent;
+}
+
+#top-round-row:active,
+#top-round-row:focus,
+#top-round-row:focus-visible,
+#top-round-row:focus-within,
+#top-round-row:hover {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+#top-round-row::selection,
+#top-round-row *::selection {
+  background: transparent;
 }
 
 .top-icon-btn {
