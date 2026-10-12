@@ -2398,6 +2398,8 @@ button.disabled {
 <script>
 /* ============================================================
    LONG-PRESS KILLER (для верхней панели иконок)
+   ВАЖНО: touchend НЕ гасится, чтобы обычные короткие тапы
+   проходили до обработчиков (сердечко, самолётик).
    ============================================================ */
 (function() {
   try {
@@ -2405,17 +2407,10 @@ button.disabled {
       if (!el) return;
 
       el.addEventListener('touchstart', function(e) {
-        e.stopPropagation();
         if (e.cancelable) e.preventDefault();
       }, { passive: false, capture: true });
 
       el.addEventListener('touchmove', function(e) {
-        e.stopPropagation();
-        if (e.cancelable) e.preventDefault();
-      }, { passive: false, capture: true });
-
-      el.addEventListener('touchend', function(e) {
-        e.stopPropagation();
         if (e.cancelable) e.preventDefault();
       }, { passive: false, capture: true });
 
@@ -7142,9 +7137,37 @@ const UI = (() => {
 
   function initSupportModule() {
     if (el.topHeartBtn) {
-      const openHandler = (e) => { e.preventDefault(); e.stopPropagation(); openSupportOverlay(); };
+      let lastHeartTs = 0;
+      const openHandler = (e) => {
+        if (e.cancelable) e.preventDefault();
+        e.stopPropagation();
+        const now = Date.now();
+        if (now - lastHeartTs < 350) return;
+        lastHeartTs = now;
+        openSupportOverlay();
+      };
       el.topHeartBtn.addEventListener('click', openHandler);
       el.topHeartBtn.addEventListener('touchend', openHandler, { passive: false });
+    }
+
+    if (el.topTgBtn) {
+      let lastTgTs = 0;
+      const tgHandler = (e) => {
+        if (e.cancelable) e.preventDefault();
+        e.stopPropagation();
+        const now = Date.now();
+        if (now - lastTgTs < 350) return;
+        lastTgTs = now;
+        const url = el.topTgBtn.getAttribute('href') || 'https://t.me/ThePokerWay';
+        try {
+          const w = window.open(url, '_blank', 'noopener,noreferrer');
+          if (!w) { window.location.href = url; }
+        } catch (err) {
+          try { window.location.href = url; } catch (e2) {}
+        }
+      };
+      el.topTgBtn.addEventListener('click', tgHandler);
+      el.topTgBtn.addEventListener('touchend', tgHandler, { passive: false });
     }
 
     if (el.topCardsBtn) {
