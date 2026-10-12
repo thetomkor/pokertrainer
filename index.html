@@ -1976,8 +1976,13 @@ button.disabled {
         <div id="top-round-row">
           <button id="top-cards-btn" class="top-icon-btn" type="button" aria-label="Сайт">
             <svg viewBox="0 0 32 32" aria-hidden="true">
-              <path d="M16 3.5 A12.5 12.5 0 1 1 15.99 3.5 Z M3.5 16 L28.5 16 M4.8 9.5 L27.2 9.5 M4.8 22.5 L27.2 22.5 M16 3.5 A6 12.5 0 0 0 16 28.5 A6 12.5 0 0 0 16 3.5 Z"
-                    fill="#3a2c10" stroke="#b8924a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd"/>
+              <circle cx="16" cy="16" r="12.5" fill="#3a2c10" stroke="#b8924a" stroke-width="1.6"/>
+              <g fill="none" stroke="#b8924a" stroke-width="1.4">
+                <ellipse cx="16" cy="16" rx="6" ry="12.5"/>
+                <line x1="3.5" y1="16" x2="28.5" y2="16"/>
+                <line x1="4.8" y1="9.5" x2="27.2" y2="9.5"/>
+                <line x1="4.8" y1="22.5" x2="27.2" y2="22.5"/>
+              </g>
             </svg>
           </button>
           <button id="top-heart-btn" class="top-icon-btn top-icon-btn--heart" type="button" aria-label="Поддержать автора">
@@ -2317,9 +2322,6 @@ button.disabled {
       var t = document.getElementById('top-tg-btn');
       if (t) {
         killLongPress(t);
-        t.addEventListener('click', function(e) {
-          if (e.pointerType === 'touch' || e.sourceCapabilities) return;
-        }, { passive: true });
       }
     }
 
