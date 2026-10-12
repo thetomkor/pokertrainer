@@ -110,6 +110,49 @@ button.disabled {
   cursor: default;
 }
 
+/* ============================================================
+   ПОЛНЫЙ ЗАПРЕТ ВЫДЕЛЕНИЯ НА ВСЕХ КРУПНЫХ СЛОЯХ
+   Это ключевая правка против квадрата системного выделения.
+   ============================================================ */
+#app,
+#table-scene,
+#poker-table-wood,
+#poker-table,
+#board-area,
+#top-info,
+#seats,
+#swipe-center,
+#place-center,
+#board-cards-wrap,
+#table-info {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  -webkit-focus-ring-color: transparent;
+}
+
+#app:active, #app:focus, #app:focus-visible, #app:focus-within,
+#table-scene:active, #table-scene:focus, #table-scene:focus-visible, #table-scene:focus-within,
+#poker-table-wood:active, #poker-table-wood:focus, #poker-table-wood:focus-visible, #poker-table-wood:focus-within,
+#poker-table:active, #poker-table:focus, #poker-table:focus-visible, #poker-table:focus-within {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none;
+  -webkit-focus-ring-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+#app::selection, #app *::selection,
+#table-scene::selection, #table-scene *::selection,
+#poker-table-wood::selection, #poker-table-wood *::selection,
+#poker-table::selection, #poker-table *::selection {
+  background: transparent;
+}
+
 #hero-actions.inactive,
 #hero-actions.inactive *,
 #hero-actions.inactive input,
@@ -1305,7 +1348,6 @@ button.disabled {
   -webkit-appearance: none;
   appearance: none;
   -webkit-focus-ring-color: transparent;
-  /* Полностью убираем панель как видимый бокс */
   contain: layout style;
   isolation: isolate;
 }
@@ -1314,18 +1356,13 @@ button.disabled {
 #top-round-row:focus,
 #top-round-row:focus-visible,
 #top-round-row:focus-within,
-#top-round-row:hover,
-#top-round-row:target,
-#top-round-row:checked,
-#top-round-row:visited,
-#top-round-row:link {
+#top-round-row:hover {
   background: none !important;
   border: 0 !important;
   outline: 0 !important;
   box-shadow: none !important;
   -webkit-tap-highlight-color: transparent !important;
   -webkit-focus-ring-color: transparent !important;
-  color: inherit !important;
 }
 
 #top-round-row::before,
@@ -1460,7 +1497,6 @@ button.disabled {
   transform: translateX(-6px);
 }
 
-/* Глобус: без прямоугольной подложки при нажатии */
 #top-cards-btn,
 #top-cards-btn:hover,
 #top-cards-btn:active,
@@ -2430,6 +2466,65 @@ button.disabled {
         const kids = svg.querySelectorAll('*');
         for (let i = 0; i < kids.length; i++) hardKill(kids[i]);
       }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', apply);
+    } else {
+      apply();
+    }
+  } catch (e) {}
+})();
+</script>
+
+<script>
+/* ============================================================
+   ГЛОБАЛЬНЫЙ KILLER: подавляет системное выделение на сцене
+   стола, самом столе, сукне и на всём приложении целиком.
+   Именно эта часть закрывает квадрат долгого тапа.
+   ============================================================ */
+(function() {
+  try {
+    function bindGlobalSwallow(node) {
+      if (!node) return;
+      if (node.__globalSwallowBound) return;
+      node.__globalSwallowBound = true;
+
+      const swallowCtx = (e) => {
+        const t = e.target;
+        if (t && (
+          t.closest('#top-round-row') ||
+          t.closest('#hands-history-row') ||
+          t.closest('#hero-actions') ||
+          t.closest('#quick-percent-list') ||
+          t.closest('#bottom-panel') ||
+          t.closest('#support-overlay') ||
+          t.closest('#final-overlay') ||
+          t.closest('#start-overlay')
+        )) return;
+        if (e.cancelable) e.preventDefault();
+      };
+
+      node.addEventListener('contextmenu', swallowCtx, { passive: false, capture: true });
+      node.addEventListener('selectstart', (e) => {
+        const t = e.target;
+        if (t && (t.closest('#top-round-row') || t.closest('#hands-history-row'))) return;
+        e.preventDefault();
+      }, { passive: false, capture: true });
+      node.addEventListener('dragstart', (e) => {
+        const t = e.target;
+        if (t && (t.closest('#top-round-row') || t.closest('#hands-history-row'))) return;
+        e.preventDefault();
+      }, { passive: false, capture: true });
+    }
+
+    function apply() {
+      bindGlobalSwallow(document.getElementById('app'));
+      bindGlobalSwallow(document.getElementById('table-scene'));
+      bindGlobalSwallow(document.getElementById('poker-table-wood'));
+      bindGlobalSwallow(document.getElementById('poker-table'));
+      bindGlobalSwallow(document.body);
+      bindGlobalSwallow(document.documentElement);
     }
 
     if (document.readyState === 'loading') {
