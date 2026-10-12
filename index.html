@@ -400,6 +400,13 @@ button.disabled {
 }
 #board-cards .card .suit { font-size: clamp(24px, 3.8vmin, 36px); }
 
+/* Перекрытие теней и свечений между картами борда: каждая следующая карта выше предыдущей */
+#board-cards .card:nth-child(1) { z-index: 5; }
+#board-cards .card:nth-child(2) { z-index: 4; }
+#board-cards .card:nth-child(3) { z-index: 3; }
+#board-cards .card:nth-child(4) { z-index: 2; }
+#board-cards .card:nth-child(5) { z-index: 1; }
+
 #board-cards .card.dimmed {
   position: relative;
 }
@@ -553,6 +560,12 @@ button.disabled {
   border-radius: clamp(4px, 0.6vmin, 7px);
 }
 .seat .seat-cards .card .suit { font-size: clamp(24px, 3.8vmin, 36px); }
+
+/* Перекрытие теней и свечений между картами игрока:
+   левая карта выше правой, чтобы тень/свечение правой не заходили на левую. */
+.seat .seat-cards .card:nth-child(1) { z-index: 3; }
+.seat .seat-cards .card:nth-child(2) { z-index: 2; }
+.seat .seat-cards .card:nth-child(3) { z-index: 1; }
 
 .seat.hero .seat-cards .card {
   --card-w: clamp(37.8px, 5.58vmin, 48.6px);
