@@ -1975,8 +1975,14 @@ button.disabled {
 
         <div id="top-round-row">
           <button id="top-cards-btn" class="top-icon-btn" type="button" aria-label="Сайт">
-            <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-              <path d="M16 28.5C16 28.5 3.5 20.4 3.5 11.9C3.5 7.5 6.9 4.1 11 4.1C13.2 4.1 15.1 5.1 16 6.6C16.9 5.1 18.8 4.1 21 4.1C25.1 4.1 28.5 7.5 28.5 11.9C28.5 20.4 16 28.5 16 28.5Z"/>
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <circle cx="16" cy="16" r="12.5" fill="#3a2c10" stroke="#b8924a" stroke-width="1.6"/>
+              <g fill="none" stroke="#b8924a" stroke-width="1.4">
+                <ellipse cx="16" cy="16" rx="6" ry="12.5"/>
+                <line x1="3.5" y1="16" x2="28.5" y2="16"/>
+                <line x1="4.8" y1="9.5" x2="27.2" y2="9.5"/>
+                <line x1="4.8" y1="22.5" x2="27.2" y2="22.5"/>
+              </g>
             </svg>
           </button>
           <button id="top-heart-btn" class="top-icon-btn top-icon-btn--heart" type="button" aria-label="Поддержать автора">
@@ -2280,11 +2286,13 @@ button.disabled {
 
       el.addEventListener('touchmove', function(e) {
         e.stopPropagation();
-      }, { passive: true, capture: true });
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false, capture: true });
 
       el.addEventListener('touchend', function(e) {
         e.stopPropagation();
-      }, { passive: true, capture: true });
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false, capture: true });
 
       el.addEventListener('contextmenu', function(e) {
         e.preventDefault();
@@ -2323,6 +2331,60 @@ button.disabled {
       document.addEventListener('DOMContentLoaded', applyToTopRow);
     } else {
       applyToTopRow();
+    }
+  } catch (e) {}
+})();
+</script>
+
+<script>
+/* ============================================================
+   HARD LONG-PRESS KILLER FOR GLOBE BUTTON ONLY
+   Точечная страховка именно для глобуса: убирает квадратик
+   долгого тапа в мобильных браузерах.
+   Гасит выделение на самой кнопке и на всех её внутренних
+   фигурах, чтобы браузер не мог зацепиться ни за что.
+   ============================================================ */
+(function() {
+  try {
+    function hardKill(node) {
+      if (!node) return;
+      if (node.__hardKillBound) return;
+      node.__hardKillBound = true;
+
+      const swallow = (e) => {
+        if (e.cancelable) e.preventDefault();
+        e.stopPropagation();
+      };
+
+      node.addEventListener('touchstart', swallow, { passive: false, capture: true });
+      node.addEventListener('touchmove', swallow, { passive: false, capture: true });
+      node.addEventListener('touchend', swallow, { passive: false, capture: true });
+      node.addEventListener('touchcancel', swallow, { passive: false, capture: true });
+      node.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); return false; }, { passive: false, capture: true });
+      node.addEventListener('selectstart', (e) => { e.preventDefault(); e.stopPropagation(); return false; }, { passive: false, capture: true });
+      node.addEventListener('dragstart', (e) => { e.preventDefault(); e.stopPropagation(); return false; }, { passive: false, capture: true });
+      node.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
+
+    function apply() {
+      const btn = document.getElementById('top-cards-btn');
+      if (!btn) return;
+      hardKill(btn);
+      const svg = btn.querySelector('svg');
+      if (svg) {
+        hardKill(svg);
+        const kids = svg.querySelectorAll('*');
+        for (let i = 0; i < kids.length; i++) hardKill(kids[i]);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', apply);
+    } else {
+      apply();
     }
   } catch (e) {}
 })();
