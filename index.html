@@ -1405,6 +1405,7 @@ button.disabled {
   flex: 0 0 26px;
   position: relative;
   pointer-events: auto;
+  overflow: hidden;
 }
 
 .top-icon-btn {
@@ -1515,16 +1516,18 @@ button.disabled {
   }
 }
 
+/* Самолётик: ровно по границам слота, без пустот */
 .top-icon-btn.top-icon-btn-tg {
   width: 26px;
   height: 26px;
+  margin: 0;
 }
 
 .top-icon-btn.top-icon-btn-tg svg {
-  width: 38px;
-  height: 38px;
-  margin: -6px;
-  transform: translateX(-6px);
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  transform: none;
 }
 
 #top-cards-btn,
