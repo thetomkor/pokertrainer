@@ -110,49 +110,6 @@ button.disabled {
   cursor: default;
 }
 
-/* ============================================================
-   ПОЛНЫЙ ЗАПРЕТ ВЫДЕЛЕНИЯ НА ВСЕХ КРУПНЫХ СЛОЯХ
-   Это ключевая правка против квадрата системного выделения.
-   ============================================================ */
-#app,
-#table-scene,
-#poker-table-wood,
-#poker-table,
-#board-area,
-#top-info,
-#seats,
-#swipe-center,
-#place-center,
-#board-cards-wrap,
-#table-info {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  -webkit-focus-ring-color: transparent;
-}
-
-#app:active, #app:focus, #app:focus-visible, #app:focus-within,
-#table-scene:active, #table-scene:focus, #table-scene:focus-visible, #table-scene:focus-within,
-#poker-table-wood:active, #poker-table-wood:focus, #poker-table-wood:focus-visible, #poker-table-wood:focus-within,
-#poker-table:active, #poker-table:focus, #poker-table:focus-visible, #poker-table:focus-within {
-  outline: none !important;
-  outline-offset: 0 !important;
-  box-shadow: none;
-  -webkit-focus-ring-color: transparent !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-#app::selection, #app *::selection,
-#table-scene::selection, #table-scene *::selection,
-#poker-table-wood::selection, #poker-table-wood *::selection,
-#poker-table::selection, #poker-table *::selection {
-  background: transparent;
-}
-
 #hero-actions.inactive,
 #hero-actions.inactive *,
 #hero-actions.inactive input,
@@ -1322,14 +1279,69 @@ button.disabled {
   box-shadow: 0 1px 0 #8a6508, inset 0 1px 0 rgba(255,255,255,.35);
 }
 
-/* Панель иконок: невидимый держатель, никакой собственной коробки */
+/* ============================================================
+   TOP-DOCK — отдельный блок иконок поверх ВСЕХ блоков и слоёв
+   Невидимый держатель. Никакой собственной коробки.
+   Любое выделение, долгий тап, подсветка — запрещены.
+   ============================================================ */
+#top-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: none;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-focus-ring-color: transparent;
+}
+
+#top-dock,
+#top-dock:active,
+#top-dock:focus,
+#top-dock:focus-visible,
+#top-dock:focus-within,
+#top-dock:hover {
+  background: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+#top-dock::before,
+#top-dock::after {
+  content: none !important;
+  display: none !important;
+}
+
+#top-dock::selection,
+#top-dock *::selection {
+  background: transparent;
+}
+
 #top-round-row {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 22px;
-  z-index: 120;
   pointer-events: none;
   left: 0;
   top: 0;
@@ -1352,6 +1364,7 @@ button.disabled {
   isolation: isolate;
 }
 
+#top-round-row,
 #top-round-row:active,
 #top-round-row:focus,
 #top-round-row:focus-visible,
@@ -2067,30 +2080,6 @@ button.disabled {
 
         <div id="seats"></div>
 
-        <div id="top-round-row">
-          <button id="top-cards-btn" class="top-icon-btn" type="button" aria-label="Сайт">
-            <svg viewBox="0 0 32 32" aria-hidden="true">
-              <circle cx="16" cy="16" r="12.5" fill="#3a2c10" stroke="#b8924a" stroke-width="1.6"/>
-              <g fill="none" stroke="#b8924a" stroke-width="1.4">
-                <ellipse cx="16" cy="16" rx="6" ry="12.5"/>
-                <line x1="3.5" y1="16" x2="28.5" y2="16"/>
-                <line x1="4.8" y1="9.5" x2="27.2" y2="9.5"/>
-                <line x1="4.8" y1="22.5" x2="27.2" y2="22.5"/>
-              </g>
-            </svg>
-          </button>
-          <button id="top-heart-btn" class="top-icon-btn top-icon-btn--heart" type="button" aria-label="Поддержать автора">
-            <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-              <path d="M16 28.5C16 28.5 3.5 20.4 3.5 11.9C3.5 7.5 6.9 4.1 11 4.1C13.2 4.1 15.1 5.1 16 6.6C16.9 5.1 18.8 4.1 21 4.1C25.1 4.1 28.5 7.5 28.5 11.9C28.5 20.4 16 28.5 16 28.5Z"/>
-            </svg>
-          </button>
-          <a id="top-tg-btn" class="top-icon-btn top-icon-btn-tg" href="https://t.me/ThePokerWay" target="_blank" rel="noopener noreferrer" aria-label="Открыть канал в Telegram">
-            <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-              <path d="M23.06 9.07 8.32 14.76c-.98.4-.97 1.78.01 2.17l3.66 1.4 1.4 4.5c.2.64 1.02.82 1.48.32l1.98-2.14 3.86 2.83c.55.4 1.34.11 1.49-.56l2.66-12.62c.16-.75-.6-1.35-1.8-1.59zM12.7 17.36l8.02-5.02-6.55 6.14-.18 2.55-1.29-3.67z"/>
-            </svg>
-          </a>
-        </div>
-
         <div id="hero-actions" class="inactive">
           <div id="hand-nav">
             <div class="nav-history">
@@ -2215,6 +2204,33 @@ button.disabled {
       <h1>Poker Trainer</h1>
       <p>Тренируй свои покерные навыки</p>
       <button id="btn-start">Начать игру</button>
+    </div>
+  </div>
+
+  <!-- TOP-DOCK: отдельный блок иконок поверх всех блоков и слоёв -->
+  <div id="top-dock">
+    <div id="top-round-row">
+      <button id="top-cards-btn" class="top-icon-btn" type="button" aria-label="Сайт">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="12.5" fill="#3a2c10" stroke="#b8924a" stroke-width="1.6"/>
+          <g fill="none" stroke="#b8924a" stroke-width="1.4">
+            <ellipse cx="16" cy="16" rx="6" ry="12.5"/>
+            <line x1="3.5" y1="16" x2="28.5" y2="16"/>
+            <line x1="4.8" y1="9.5" x2="27.2" y2="9.5"/>
+            <line x1="4.8" y1="22.5" x2="27.2" y2="22.5"/>
+          </g>
+        </svg>
+      </button>
+      <button id="top-heart-btn" class="top-icon-btn top-icon-btn--heart" type="button" aria-label="Поддержать автора">
+        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+          <path d="M16 28.5C16 28.5 3.5 20.4 3.5 11.9C3.5 7.5 6.9 4.1 11 4.1C13.2 4.1 15.1 5.1 16 6.6C16.9 5.1 18.8 4.1 21 4.1C25.1 4.1 28.5 7.5 28.5 11.9C28.5 20.4 16 28.5 16 28.5Z"/>
+        </svg>
+      </button>
+      <a id="top-tg-btn" class="top-icon-btn top-icon-btn-tg" href="https://t.me/ThePokerWay" target="_blank" rel="noopener noreferrer" aria-label="Открыть канал в Telegram">
+        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+          <path d="M23.06 9.07 8.32 14.76c-.98.4-.97 1.78.01 2.17l3.66 1.4 1.4 4.5c.2.64 1.02.82 1.48.32l1.98-2.14 3.86 2.83c.55.4 1.34.11 1.49-.56l2.66-12.62c.16-.75-.6-1.35-1.8-1.59zM12.7 17.36l8.02-5.02-6.55 6.14-.18 2.55-1.29-3.67z"/>
+        </svg>
+      </a>
     </div>
   </div>
 
@@ -2403,6 +2419,9 @@ button.disabled {
     }
 
     function applyToTopRow() {
+      var dock = document.getElementById('top-dock');
+      if (dock) killLongPress(dock);
+
       var row = document.getElementById('top-round-row');
       if (row) killLongPress(row);
 
@@ -2466,65 +2485,6 @@ button.disabled {
         const kids = svg.querySelectorAll('*');
         for (let i = 0; i < kids.length; i++) hardKill(kids[i]);
       }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', apply);
-    } else {
-      apply();
-    }
-  } catch (e) {}
-})();
-</script>
-
-<script>
-/* ============================================================
-   ГЛОБАЛЬНЫЙ KILLER: подавляет системное выделение на сцене
-   стола, самом столе, сукне и на всём приложении целиком.
-   Именно эта часть закрывает квадрат долгого тапа.
-   ============================================================ */
-(function() {
-  try {
-    function bindGlobalSwallow(node) {
-      if (!node) return;
-      if (node.__globalSwallowBound) return;
-      node.__globalSwallowBound = true;
-
-      const swallowCtx = (e) => {
-        const t = e.target;
-        if (t && (
-          t.closest('#top-round-row') ||
-          t.closest('#hands-history-row') ||
-          t.closest('#hero-actions') ||
-          t.closest('#quick-percent-list') ||
-          t.closest('#bottom-panel') ||
-          t.closest('#support-overlay') ||
-          t.closest('#final-overlay') ||
-          t.closest('#start-overlay')
-        )) return;
-        if (e.cancelable) e.preventDefault();
-      };
-
-      node.addEventListener('contextmenu', swallowCtx, { passive: false, capture: true });
-      node.addEventListener('selectstart', (e) => {
-        const t = e.target;
-        if (t && (t.closest('#top-round-row') || t.closest('#hands-history-row'))) return;
-        e.preventDefault();
-      }, { passive: false, capture: true });
-      node.addEventListener('dragstart', (e) => {
-        const t = e.target;
-        if (t && (t.closest('#top-round-row') || t.closest('#hands-history-row'))) return;
-        e.preventDefault();
-      }, { passive: false, capture: true });
-    }
-
-    function apply() {
-      bindGlobalSwallow(document.getElementById('app'));
-      bindGlobalSwallow(document.getElementById('table-scene'));
-      bindGlobalSwallow(document.getElementById('poker-table-wood'));
-      bindGlobalSwallow(document.getElementById('poker-table'));
-      bindGlobalSwallow(document.body);
-      bindGlobalSwallow(document.documentElement);
     }
 
     if (document.readyState === 'loading') {
@@ -4176,6 +4136,7 @@ const UI = (() => {
     el.hnReplay       = document.getElementById('hn-replay');
     el.hnResume       = document.getElementById('hn-resume');
     el.hnSettings     = document.getElementById('hn-settings');
+    el.topDock        = document.getElementById('top-dock');
     el.topCardsBtn    = document.getElementById('top-cards-btn');
     el.topHeartBtn    = document.getElementById('top-heart-btn');
     el.topTgBtn       = document.getElementById('top-tg-btn');
@@ -4206,6 +4167,7 @@ const UI = (() => {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       updateBoardAreaOffset();
       alignPercentBlockBottom();
+      placeTopRoundRow();
     }));
   }
 
@@ -5526,6 +5488,7 @@ const UI = (() => {
     el.hnResume       = document.getElementById('hn-resume');
     el.hnSettings     = document.getElementById('hn-settings');
     el.btnRestartPanel = document.getElementById('btn-restart-panel');
+    el.topDock        = document.getElementById('top-dock');
     el.topCardsBtn    = document.getElementById('top-cards-btn');
     el.topHeartBtn    = document.getElementById('top-heart-btn');
     el.topTgBtn       = document.getElementById('top-tg-btn');
@@ -5830,6 +5793,7 @@ const UI = (() => {
               target.closest('.hero-timer-zone') ||
               target.closest('#support-overlay') ||
               target.closest('#final-overlay') ||
+              target.closest('#top-dock') ||
               target.closest('#top-round-row') ||
               target.closest('#hands-history-row'));
   }
