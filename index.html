@@ -1281,16 +1281,17 @@ button.disabled {
 
 /* ============================================================
    TOP-DOCK — отдельный блок иконок поверх ВСЕХ блоков и слоёв
-   Невидимый держатель. Никакой собственной коробки.
-   Любое выделение, долгий тап, подсветка — запрещены.
+   Слой 130 — ниже окна настроек (140), выше стола и сцены.
+   Позиционируется от #poker-table, чтобы выровняться
+   по левому краю панели истории раздач.
    ============================================================ */
 #top-dock {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 9999;
+  z-index: 130;
   pointer-events: none;
   background: none;
   border: 0;
@@ -2207,7 +2208,7 @@ button.disabled {
     </div>
   </div>
 
-  <!-- TOP-DOCK: отдельный блок иконок поверх всех блоков и слоёв -->
+  <!-- TOP-DOCK: отдельный блок иконок, слой 130 — ниже настроек (140) -->
   <div id="top-dock">
     <div id="top-round-row">
       <button id="top-cards-btn" class="top-icon-btn" type="button" aria-label="Сайт">
@@ -4218,16 +4219,31 @@ const UI = (() => {
   }
 
   function placeTopRoundRow() {
-    if (!el.topRoundRow || !el.heroActions) return;
-    const tableRect = document.getElementById('poker-table').getBoundingClientRect();
-    const haRect = el.heroActions.getBoundingClientRect();
-    if (haRect.height <= 0) return;
+    if (!el.topRoundRow || !el.topDock) return;
+    const tableEl = document.getElementById('poker-table');
+    if (!tableEl) return;
+    const tableRect = tableEl.getBoundingClientRect();
+    if (tableRect.height <= 0) return;
 
+    const dockRect = el.topDock.getBoundingClientRect();
     const rowHeight = el.topRoundRow.offsetHeight || 30;
-    const GAP_ABOVE_HAND_NAV = 14;
-    const top = haRect.top - tableRect.top - GAP_ABOVE_HAND_NAV - rowHeight;
+    const rowWidth = el.topRoundRow.offsetWidth || 0;
 
-    const left = haRect.left - tableRect.left;
+    const GAP_ABOVE_HAND_NAV = 14;
+    const handNavEl = document.getElementById('hand-nav');
+    let anchorTopInTable;
+    if (handNavEl) {
+      const hnRect = handNavEl.getBoundingClientRect();
+      anchorTopInTable = (hnRect.top - tableRect.top) - GAP_ABOVE_HAND_NAV - rowHeight;
+    } else {
+      const haRect = el.heroActions.getBoundingClientRect();
+      anchorTopInTable = (haRect.top - tableRect.top) - GAP_ABOVE_HAND_NAV - rowHeight;
+    }
+
+    const anchorLeftInTable = 0;
+
+    const left = (tableRect.left - dockRect.left) + anchorLeftInTable;
+    const top = (tableRect.top - dockRect.top) + anchorTopInTable;
 
     el.topRoundRow.style.left = left + 'px';
     el.topRoundRow.style.top = top + 'px';
