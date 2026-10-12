@@ -1282,8 +1282,6 @@ button.disabled {
 /* ============================================================
    TOP-DOCK — отдельный блок иконок поверх ВСЕХ блоков и слоёв
    Слой 130 — ниже окна настроек (140), выше стола и сцены.
-   Позиционируется от #poker-table, чтобы выровняться
-   по левому краю панели истории раздач.
    ============================================================ */
 #top-dock {
   position: absolute;
@@ -1394,8 +1392,6 @@ button.disabled {
   pointer-events: auto;
 }
 
-/* Обёртка вокруг иконки: фиксированный размер, визуальное сжатие
-   не влияет на поток и на соседей. */
 .top-icon-slot {
   display: inline-flex;
   align-items: center;
@@ -1405,6 +1401,7 @@ button.disabled {
   flex: 0 0 26px;
   position: relative;
   pointer-events: auto;
+  overflow: visible;
 }
 
 .top-icon-btn {
@@ -1515,8 +1512,7 @@ button.disabled {
   }
 }
 
-/* Самолётик: своего слота не имеет отдельного размера,
-   крупная иконка центрируется внутри своего top-icon-slot. */
+/* Самолётик: слот 26×26, крупная иконка 38×38 центрируется внутри слота. */
 .top-icon-btn.top-icon-btn-tg {
   width: 26px;
   height: 26px;
@@ -1526,7 +1522,6 @@ button.disabled {
   width: 38px;
   height: 38px;
   margin: -6px;
-  /* Никакого сдвига по X — только центрирование внутри слота */
   transform: none;
   flex-shrink: 0;
 }
@@ -2224,7 +2219,7 @@ button.disabled {
     </div>
   </div>
 
-  <!-- TOP-DOCK: отдельный блок иконок, слой 130 — ниже настроек (140) -->
+  <!-- TOP-DOCK -->
   <div id="top-dock">
     <div id="top-round-row">
       <span class="top-icon-slot">
