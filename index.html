@@ -1290,6 +1290,13 @@ button.disabled {
   left: 0;
   top: 0;
   opacity: 0.85;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: manipulation;
 }
 
 .top-icon-btn {
@@ -2257,6 +2264,76 @@ button.disabled {
 
 <script>
 /* ============================================================
+   LONG-PRESS KILLER (для верхней панели иконок)
+   Убирает системный long-press highlight во ВСЕХ браузерах:
+   Safari iOS, Chrome Android, Firefox Mobile.
+   Обычные тапы продолжают работать.
+   ============================================================ */
+(function() {
+  try {
+    function killLongPress(el) {
+      if (!el) return;
+
+      el.addEventListener('touchstart', function(e) {
+        e.stopPropagation();
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false, capture: true });
+
+      el.addEventListener('touchmove', function(e) {
+        e.stopPropagation();
+      }, { passive: true, capture: true });
+
+      el.addEventListener('touchend', function(e) {
+        e.stopPropagation();
+      }, { passive: true, capture: true });
+
+      el.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }, { passive: false, capture: true });
+
+      el.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+        return false;
+      }, { passive: false, capture: true });
+
+      el.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+      }, { passive: false, capture: true });
+    }
+
+    function applyToTopRow() {
+      var row = document.getElementById('top-round-row');
+      if (row) killLongPress(row);
+
+      var g = document.getElementById('top-cards-btn');
+      if (g) killLongPress(g);
+
+      var h = document.getElementById('top-heart-btn');
+      if (h) killLongPress(h);
+
+      var t = document.getElementById('top-tg-btn');
+      if (t) {
+        killLongPress(t);
+        t.addEventListener('click', function(e) {
+          if (e.pointerType === 'touch' || e.sourceCapabilities) return;
+        }, { passive: true });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyToTopRow);
+    } else {
+      applyToTopRow();
+    }
+  } catch (e) {}
+})();
+</script>
+
+<script>
+/* ============================================================
    ENGINE
    ============================================================ */
 
@@ -2606,7 +2683,6 @@ const Engine = (() => {
 
       case 'call': {
         const pay = Math.min(toCall, p.stack);
-        if (pay < 0) return { ok: false, error: 'Отрицательный колл' };
         p.stack -= pay; p.committedThisStreet += pay;
         p.committedTotal += pay; state.pot += pay;
         p.hasActedThisStreet = true;
@@ -2660,7 +2736,6 @@ const Engine = (() => {
 
       case 'allin': {
         const pay = p.stack;
-        if (pay <= 0) return { ok: false, error: 'Нет фишек для олл-ина' };
         const target = p.committedThisStreet + pay;
         p.stack = 0; p.committedThisStreet = target;
         p.committedTotal += pay; state.pot += pay;
@@ -6792,7 +6867,7 @@ const UI = (() => {
   }
 
   /* ============================================================
-     МОДУЛЬ ПОДДЕРЖКИ АВТОРА (точная копия лендинга)
+     МОДУЛЬ ПОДДЕРЖКИ АВТОРА
      ============================================================ */
 
   const _N = [76,117,99,107,121,76,105,110,107,97];
